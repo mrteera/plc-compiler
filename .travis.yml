@@ -1,0 +1,15 @@
+language: java
+sudo: false
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+before_script:
+  - mkdir /usr/class
+  - cd /usr/class && wget http://spark-university.s3.amazonaws.com/stanford-compilers/vm/student-dist.tar.gz
+  - cd /usr/class && tar -xf student-dist.tar.gz
+  - export PATH=/usr/class/cs143/cool/bin:$PATH
+  - make -f /usr/class/cs143/assignments/PA2J/Makefile
+  - make lexer
+script:
+  - perl pa1-grading.pl
