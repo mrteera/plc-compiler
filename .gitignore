@@ -1,12 +1,24 @@
 *.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+AbstractSymbol.java
+AbstractTable.java
+BoolConst.java
+cgen
+CgenSupport.java
+Flags.java
+IdSymbol.java
+IdTable.java
+IntSymbol.java
+IntTable.java
+Lexer.java
+Makefile
+mycoolc
+parser
+semant
+StringSymbol.java
+StringTable.java
+TokenConstants.java
+Utilities.java
+grading
+CoolLexer.java
+lexer
+..gitignore.un~
