@@ -5,11 +5,10 @@ addons:
     packages:
       - oracle-java8-installer
 before_script:
-  - mkdir class
-  - cd class && wget http://spark-university.s3.amazonaws.com/stanford-compilers/vm/student-dist.tar.gz
-  - cd class && tar -xf student-dist.tar.gz
-  - export PATH=${TRAVIS_BUILD_DIR}/class/cs143/cool/bin:$PATH
-  - make -f ${TRAVIS_BUILD_DIR}/class/cs143/assignments/PA2J/Makefile
+  - wget http://spark-university.s3.amazonaws.com/stanford-compilers/vm/student-dist.tar.gz
+  - tar -xf student-dist.tar.gz
+  - export PATH=${TRAVIS_BUILD_DIR}/cs143/cool/bin:$PATH
+  - make -f ${TRAVIS_BUILD_DIR}/cs143/assignments/PA2J/Makefile
   - make lexer
 script:
   - perl pa1-grading.pl
