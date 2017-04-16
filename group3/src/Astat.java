@@ -17,16 +17,12 @@ public class Astat {
      */
     String assVariable;
     Aexp assExpr;
-
     public static Astat assignment(String Variable, Aexp expr) {
         Astat statement = new Astat();
         statement.statementType = assignment;
-
         statement.assVariable = Variable;
         statement.assExpr = expr;
-
         return statement;
-
     }
 
     /*
@@ -127,7 +123,7 @@ public class Astat {
             }
         } else if (statementType == ifthen) {
 
-            if (ifcondition.getValue() != 0) {
+            if (ifcondition.getValue() != null) {
                 ifbody.execute();
             }
 
@@ -135,7 +131,7 @@ public class Astat {
 
             for (;;) {
 
-                if (whileCondition.getValue() != 0) {
+                if (whileCondition.getValue() != null) {
                     whileBody.execute();
                 } else {
                     break;

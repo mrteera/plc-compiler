@@ -75,6 +75,9 @@ int = 0 | [1-9][0-9]*
    between A and Z, a and z, zero and nine, or an underscore. */
 id = [A-Za-z_][A-Za-z_0-9]*
 
+float = {int}\.[0-9]+
+bool = true | false
+
 %%
 /* ------------------------Lexical Rules Section---------------------- */
 
@@ -105,6 +108,7 @@ id = [A-Za-z_][A-Za-z_0-9]*
     "define"           { return symbol(sym.DEFINE); }
     "int"              { return symbol(sym.TYPE, new Integer(1)); }
     "boolean"          { return symbol(sym.TYPE, new Integer(2)); }
+    "float"            { return symbol(sym.TYPE, new Integer(3)); }
     "if"               { return symbol(sym.IF); }
     "then"             { return symbol(sym.THEN); }
     "print"            { return symbol(sym.PRINT); }
@@ -116,6 +120,7 @@ id = [A-Za-z_][A-Za-z_0-9]*
    
 
     {int}      { return symbol(sym.NUMBER, new Integer(yytext())); }
+    {float}    { return symbol(sym.FLOAT, new Double(yytext())); }
 
     {id}       { return symbol(sym.ID, yytext());}
 

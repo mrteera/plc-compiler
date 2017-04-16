@@ -1,11 +1,26 @@
 package src;
 import java_cup.runtime.*;
 
+parser code {:
+    public static void print_error(String message) {
+        System.out.println();
+        System.out.println("Error: " + message);
+        System.exit(0);
+    }
+
+    public static void terminate(Variable val) {
+        System.out.println();
+        System.out.print("Program terminated successfully");
+        System.exit(0);
+    }
+:}
+
 
 terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, EQ, DEFINE, AS,
                    IF, THEN, PRINT, WHILE,  DO, BEGIN,  END, TYPE, ASG;
 terminal Integer   NUMBER;
 terminal String    ID;
+terminal Double    FLOAT;
 
 non terminal Object             program;
 non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
@@ -77,5 +92,7 @@ factor          ::= LPAREN expr:e RPAREN
                     {: RESULT = e; :}
                 | NUMBER:n
                     {: RESULT = new Aexp(n); :}
+                | FLOAT:f
+                    {: RESULT = new Aexp(f); :}
                 | ID:i
                     {: RESULT = new Aexp(i); :};

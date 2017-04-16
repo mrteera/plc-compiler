@@ -3,21 +3,38 @@ package src;
 public class Aexp {
 
     private enum AexpType {
-        INTEGER,
+        VALUE,
         ID,
         EXP
     }
     
     private final AexpType eType;
     private Integer inum;
+    private Double fnum;
     private String id;
     private Args operands;
     private int operator;
-
+    private Variable val;
+    
     Aexp(Integer x) {
-        eType = AexpType.INTEGER;
-        inum = x;        
+        eType = AexpType.VALUE;
+        val = new Variable(x);
     }
+    
+    Aexp(Double x) {
+        eType = AexpType.VALUE;
+        val = new Variable(x);
+    }
+//   
+//    Aexp(Integer x) {
+//        eType = AexpType.INTEGER;
+//        inum = x;        
+//    }
+//    
+//    Aexp(Double x) {
+//        eType = AexpType.FLOAT;
+//        fnum = x;        
+//    }
 
     Aexp(String x) {
         eType = AexpType.ID;
@@ -34,7 +51,9 @@ public class Aexp {
 
         String s = "";
         switch (this.eType) {
-            case INTEGER: s = "" + inum; break;
+            case VALUE: s = val.toString(); break;
+            //case INTEGER: s = "" + inum; break;
+            //case FLOAT: s = "" + fnum; break;
             case ID: s = id; break;
             case EXP:
                 switch (operator) {
@@ -58,12 +77,21 @@ public class Aexp {
         return s;
     }
 
-    public int getValue() {
-        Integer val = 0;
+    public Variable getValue() {
+        //Integer val = 0;
+        Variable val = null;
         switch (this.eType) {
-            case INTEGER:
-                // expression is a number
-                val = inum; break;
+            case VALUE:
+            val = this.val;
+//            if (val == null || val.getType() == Variable.ValType.VOID) {
+//                parser.print_error("Cannot get a value of type VOID");
+//            }
+            break;
+//            case INTEGER:
+//                // expression is a number
+//                val = inum; break;
+//            case FLOAT:
+//                val = fnum; break;
             case ID:
                 //expression is a variable
                 val = SymbolTable.getValue(id);
@@ -71,20 +99,24 @@ public class Aexp {
                     System.out.print(id + " was not declared");
                     System.exit(0);
                 }   break;
+//            case ID: val = SymbolTable.getAexp(id).getVal(); break;
             case EXP:
                 //expression is a math expression
                 switch (operator) {
+                    //case sym.PLUS:
+                        //val = operands.getfi().getValue() + operands.getse().getValue();
+                        //break;
                     case sym.PLUS:
-                        val = operands.getfi().getValue() + operands.getse().getValue();
+                        val = operands.getfi().getValue().plus(operands.getse().getValue());
                         break;
                     case sym.MINUS:
-                        val = operands.getfi().getValue() - operands.getse().getValue();
+                        val = operands.getfi().getValue().minus(operands.getse().getValue());
                         break;
                     case sym.TIMES:
-                        val = operands.getfi().getValue() * operands.getse().getValue();
+                        val = operands.getfi().getValue().times(operands.getse().getValue());
                         break;
                     case sym.DIVIDE:
-                        val = operands.getfi().getValue() / operands.getse().getValue();
+                        val = operands.getfi().getValue().divide(operands.getse().getValue());
                         break;
                     default:
                         break;

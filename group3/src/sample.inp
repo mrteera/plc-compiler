@@ -1,13 +1,7 @@
 define a as int;
-define b as int;
-
-a := 5;
-b := 1;
-
-while a do
-begin
-    b := b * a;
-    a := a - 1;
-end;
- 
+define b as float;
+a := 5.0;
+b := 4.0;
+b := b * a;
+print a;
 print b;

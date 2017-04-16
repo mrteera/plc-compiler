@@ -8,14 +8,15 @@ public class SymbolTable extends Hashtable<String,Object>{
     
     static {globalTable = new SymbolTable();}
 
-    static void setValue(String id, int value){
+    static void setValue(String id, Variable value){
         globalTable.put(id,value);
         // System.out.println("==============");
         // System.out.println(globalTable.getType(id));
     }
 
-    static Integer getValue(String id){
-        return (Integer) globalTable.get(id);
+    static Variable getValue(String id){
+        //return (Integer) globalTable.get(id);
+        return (Variable) globalTable.get(id);
     }
     
     static Integer getType(String id) {
