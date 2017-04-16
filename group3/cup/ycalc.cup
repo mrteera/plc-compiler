@@ -2,8 +2,8 @@ package src;
 import java_cup.runtime.*;
 
 
-terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, EQ, 
-                   IF, THEN, PRINT, WHILE,  DO, BEGIN,  END, TYPE;
+terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, EQ, DEFINE, AS,
+                   IF, THEN, PRINT, WHILE,  DO, BEGIN,  END, TYPE, ASG;
 terminal Integer   NUMBER;
 terminal String    ID;
 
@@ -39,7 +39,7 @@ statement       ::= assignment:s
                     {: RESULT = Astat.block(s); :}
                 ;
 
-vardec          ::= TYPE:t ID:i
+vardec          ::= DEFINE:d ID:i AS:a TYPE:t
                 {: RESULT = Astat.varDec((int)t, i); :}
                 ;
 while           ::= WHILE expr:e DO statement:s
@@ -55,7 +55,7 @@ ifthen          ::= IF expr:e THEN statement:s
                 ;
 
 
-assignment      ::= ID:i EQ expr:e
+assignment      ::= ID:i ASG expr:e
                     {: RESULT = Astat.assignment(i,e); :}
                 ;
 

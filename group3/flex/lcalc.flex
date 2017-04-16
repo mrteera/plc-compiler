@@ -101,6 +101,8 @@ id = [A-Za-z_][A-Za-z_0-9]*
     "("                { return symbol(sym.LPAREN); }
     ")"                { return symbol(sym.RPAREN); }
     "="                { return symbol(sym.EQ); }
+    ":="               { return symbol(sym.ASG); }
+    "define"           { return symbol(sym.DEFINE); }
     "int"              { return symbol(sym.TYPE, new Integer(1)); }
     "boolean"          { return symbol(sym.TYPE, new Integer(2)); }
     "if"               { return symbol(sym.IF); }
@@ -110,6 +112,7 @@ id = [A-Za-z_][A-Za-z_0-9]*
     "do"               { return symbol(sym.DO); }
     "begin"            { return symbol(sym.BEGIN); }
     "end"              { return symbol(sym.END); }
+    "as"               { return symbol(sym.AS); }
    
 
     {int}      { return symbol(sym.NUMBER, new Integer(yytext())); }
