@@ -1,0 +1,12 @@
+int a;
+a = 5;
+b = 1;
+
+while a do
+begin
+    b = b * a;
+    a = a - 1;
+end;
+ 
+print b;
+
