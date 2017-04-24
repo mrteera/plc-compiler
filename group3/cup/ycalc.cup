@@ -16,9 +16,9 @@ parser code {:
 :}
 
 
-terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, EQ, DEFINE, AS,
-                   IF, THEN, PRINT, WHILE,  DO, BEGIN,  END, TYPE, ASG, LCB, RCB,
-                   LT, MT;
+terminal           SEMI, COMMA, PLUS, MINUS, TIMES, DIVIDE, DOUBLEPLUS, DOUBLEMINUS, LPAREN, RPAREN, EQ, DEFINE, AS,
+                   IF, THEN, PRINT, PRINTLINE, WHILE, FOR, DO, BEGIN,  END, TYPE, ASG, LCB, RCB,
+                   LT, LE, GT, GE, NE, MT, FUNCTION;
 terminal Integer   NUMBER;
 terminal String    ID;
 terminal Double    FLOAT;

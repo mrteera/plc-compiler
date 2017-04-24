@@ -94,6 +94,7 @@ boolvalue = true|false
 
     /* Return the token SEMI declared in the class sym that was found. */
     ";"                { return symbol(sym.SEMI); }
+    ","                { return symbol(sym.COMMA); }
 
     /* Print the token found that was declared in the class sym and then
        return it. */
@@ -101,25 +102,34 @@ boolvalue = true|false
     "-"                { return symbol(sym.MINUS); }
     "*"                { return symbol(sym.TIMES); }
     "/"                { return symbol(sym.DIVIDE); }
+    "++"               { return symbol(sym.DOUBLEPLUS); }
+    "--"               { return symbol(sym.DOUBLEMINUS); }
     "("                { return symbol(sym.LPAREN); }
     ")"                { return symbol(sym.RPAREN); }
     "{"                { return symbol(sym.LCB); }
     "}"                { return symbol(sym.RCB); }
     "="                { return symbol(sym.EQ); }
+    "<"                { return symbol(sym.LT); }
+    "<="               { return symbol(sym.LE); }
+    ">"                { return symbol(sym.GT); }
+    ">="               { return symbol(sym.GE); }
+    "!="               { return symbol(sym.NE); }
     ":="               { return symbol(sym.ASG); }
     "define"           { return symbol(sym.DEFINE); }
     "int"              { return symbol(sym.TYPE, new Integer(1)); }
-    "bool"          { return symbol(sym.TYPE, new Integer(2)); }
+    "bool"             { return symbol(sym.TYPE, new Integer(2)); }
     "float"            { return symbol(sym.TYPE, new Integer(3)); }
     "if"               { return symbol(sym.IF); }
     "then"             { return symbol(sym.THEN); }
     "print"            { return symbol(sym.PRINT); }
+    "printline"        { return symbol(sym.PRINTLINE); }
     "while"            { return symbol(sym.WHILE); }
+    "for"              { return symbol(sym.FOR); }
     "do"               { return symbol(sym.DO); }
     "begin"            { return symbol(sym.BEGIN); }
     "end"              { return symbol(sym.END); }
     "as"               { return symbol(sym.AS); }
-   
+    "function"         { return symbol(sym.FUNCTION); }
 
     {int}      { return symbol(sym.NUMBER, new Integer(yytext())); }
     {float}    { return symbol(sym.FLOAT, new Double(yytext())); }
