@@ -114,7 +114,21 @@ public class Astat {
     public void execute() {
 
         if (statementType == assignment) {
-            SymbolTable.setValue(assVariable, assExpr.getValue());
+//            System.out.println("Assvariable " + assVariable + " assignment " + assExpr.getValue().getType());
+//            System.out.println("symbol" + SymbolTable.globalTable.get(assVariable) );
+            if((assExpr.getValue().getType() == Variable.ValType.INT) && ((int)SymbolTable.globalTable.get(assVariable) == 1)){
+                SymbolTable.setValue(assVariable, assExpr.getValue());
+            }
+            else if((assExpr.getValue().getType() == Variable.ValType.BOOL) && ((int)SymbolTable.globalTable.get(assVariable) == 2)){
+                SymbolTable.setValue(assVariable, assExpr.getValue());  
+            }
+            else if((assExpr.getValue().getType() == Variable.ValType.FLOAT) && ((int)SymbolTable.globalTable.get(assVariable) == 3)){
+                SymbolTable.setValue(assVariable, assExpr.getValue());
+            }
+            else {
+                parser.print_error("Variable Type mismatch");
+            }
+//            SymbolTable.setValue(assVariable, assExpr.getValue());
         } else if (statementType == varDeclaration) {
             if ( !SymbolTable.isExistID(varID)) {
                SymbolTable.setType(this.varType, this.varID);

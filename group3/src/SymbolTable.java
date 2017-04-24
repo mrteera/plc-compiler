@@ -9,9 +9,10 @@ public class SymbolTable extends Hashtable<String,Object>{
     static {globalTable = new SymbolTable();}
 
     static void setValue(String id, Variable value){
+//        System.out.println("From symboltable setvalue: " + id);
         globalTable.put(id,value);
         // System.out.println("==============");
-        // System.out.println(globalTable.getType(id));
+        // System.out.println(((Variable)globalTable.get(id)).getType());
     }
 
     static Variable getValue(String id){
