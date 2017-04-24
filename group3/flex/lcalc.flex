@@ -103,6 +103,8 @@ bool = true | false
     "/"                { return symbol(sym.DIVIDE); }
     "("                { return symbol(sym.LPAREN); }
     ")"                { return symbol(sym.RPAREN); }
+    "{"                { return symbol(sym.LCB); }
+    "}"                { return symbol(sym.RCB); }
     "="                { return symbol(sym.EQ); }
     ":="               { return symbol(sym.ASG); }
     "define"           { return symbol(sym.DEFINE); }
