@@ -1,4 +1,5 @@
 *.class
+*.DS_Store
 AbstractSymbol.java
 AbstractTable.java
 BoolConst.java
