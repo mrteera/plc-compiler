@@ -1,9 +1,0 @@
-define p as bool;
-define q as int;
-
-q := 5.0;
-
-p := false;
-
-print q;
-print p;

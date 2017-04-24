@@ -17,7 +17,8 @@ parser code {:
 
 
 terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, EQ, DEFINE, AS,
-                   IF, THEN, PRINT, WHILE,  DO, BEGIN,  END, TYPE, ASG;
+                   IF, THEN, PRINT, WHILE,  DO, BEGIN,  END, TYPE, ASG, LCB, RCB,
+                   LT, MT;
 terminal Integer   NUMBER;
 terminal String    ID;
 terminal Double    FLOAT;
@@ -58,7 +59,7 @@ statement       ::= assignment:s
 vardec          ::= DEFINE:d ID:i AS:a TYPE:t
                 {: RESULT = Astat.varDec((int)t, i); :}
                 ;
-while           ::= WHILE expr:e DO statement:s
+while           ::= WHILE LPAREN expr:e RPAREN LCB statement:s RCB
                     {: RESULT = Astat.whileloop(e,s); :}
                 ;
 
