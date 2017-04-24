@@ -80,8 +80,6 @@ expr            ::= expr:e PLUS term:t
                     {: RESULT = new Aexp(new Args(e,t), sym.PLUS); :}
                 | expr:e MINUS term:t
                     {: RESULT = new Aexp(new Args(e,t), sym.MINUS); :}
-                | BOOLVALUE: boolvalue
-                    {: RESULT = new Aexp(boolvalue);  :}
                 | term:t
                     {: RESULT = t; :};
 
@@ -98,5 +96,7 @@ factor          ::= LPAREN expr:e RPAREN
                     {: RESULT = new Aexp(n); :}
                 | FLOAT:f
                     {: RESULT = new Aexp(f); :}
+                | BOOLVALUE: boolvalue
+                    {: RESULT = new Aexp(boolvalue);  :}
                 | ID:i
                     {: RESULT = new Aexp(i); :};
