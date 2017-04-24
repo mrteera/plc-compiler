@@ -94,6 +94,12 @@ public class Astat {
         statement.blockBody = l;
         return statement;
     }
+    
+    public static Astat functionDefine(String functionName){
+        Astat statement = new Astat();
+        System.out.println("Function defined !!" + functionName);
+        return statement;
+    }
 
     public String getstat() {
         if (statementType == assignment) {
