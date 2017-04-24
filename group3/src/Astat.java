@@ -1,7 +1,6 @@
 package src;
 
 public class Astat {
-
     int statementType;
     public static int assignment = 0;
     public static int varDeclaration = 1;
@@ -42,17 +41,38 @@ public class Astat {
     }
     
     
+//    Integer varType;
+//    String varID;
+//    //Aexp varExpr;
+//    public static Astat varDec(int type, String id) {
+//        Astat statement = new Astat();
+//        statement.statementType = varDeclaration;
+//        statement.varType = type;
+//        statement.varID = id;
+//        return statement;
+//    }
+    
     Integer varType;
-    String varID;
-    //Aexp varExpr;
-    public static Astat varDec(int type, String id) {
+    Lstat varDeclList;
+    public static Astat varDec(int type, Lstat l) {
         Astat statement = new Astat();
         statement.statementType = varDeclaration;
         statement.varType = type;
-        statement.varID = id;
+        // parser.print_error(l.statementList.getClass().getName());
+        // parser.print_error((new Integer(l.statementList.size())).toString());
+        // parser.print_error((new String(l.statementList.get(0).varID)).toString());
+        statement.varDeclList = l;
+        //parser.print_error((new String(statement.varDeclList.statementList.get(0).varID)).toString());
         return statement;
     }
     
+    String varID;
+    public static Astat oneVarDec(String id) {
+        Astat statement = new Astat();
+        statement.statementType = varDeclaration;
+        statement.varID = id;
+        return statement;
+    }
     /*
      * if then statement: if ifcondition then ifbody
      *
@@ -130,11 +150,16 @@ public class Astat {
             }
 //            SymbolTable.setValue(assVariable, assExpr.getValue());
         } else if (statementType == varDeclaration) {
-            if ( !SymbolTable.isExistID(varID)) {
-               SymbolTable.setType(this.varType, this.varID);
-            } else {
-                System.err.println("Duplicate ID: " + this.varID);
-            }
+           // if ( !SymbolTable.isExistID(varID)) {
+           //parser.print_error((new String(varDeclList.statementList.get(0).varID)).toString());
+
+           for (Astat s : varDeclList.statementList) {
+               //parser.print_error((new Integer(varType)).toString());
+               SymbolTable.setType(varType, s.varID);
+           }
+          //  } else {
+            //    System.err.println("Duplicate ID: " + this.varID);
+           // }
         } else if (statementType == ifthen) {
 
             if (ifcondition.getValue() != null) {
