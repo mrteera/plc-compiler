@@ -1,4 +1,5 @@
 *.class
+*.DS_Store
 AbstractSymbol.java
 AbstractTable.java
 BoolConst.java
@@ -25,3 +26,10 @@ lexer
 group3/dist/
 group3/src/parser.java
 group3/src/sym.java
+group3/java/
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
