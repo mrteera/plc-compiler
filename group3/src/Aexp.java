@@ -25,6 +25,13 @@ public class Aexp {
         eType = AexpType.VALUE;
         val = new Variable(x);
     }
+
+    public Aexp(Boolean x) {
+        eType = AexpType.VALUE;
+        val = new Variable(x);
+    }
+    
+    
 //   
 //    Aexp(Integer x) {
 //        eType = AexpType.INTEGER;

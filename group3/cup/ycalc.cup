@@ -21,6 +21,7 @@ terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, EQ, DEFINE,
 terminal Integer   NUMBER;
 terminal String    ID;
 terminal Double    FLOAT;
+terminal Boolean   BOOLVALUE; 
 
 non terminal Object             program;
 non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
@@ -78,6 +79,8 @@ expr            ::= expr:e PLUS term:t
                     {: RESULT = new Aexp(new Args(e,t), sym.PLUS); :}
                 | expr:e MINUS term:t
                     {: RESULT = new Aexp(new Args(e,t), sym.MINUS); :}
+                | BOOLVALUE: boolvalue
+                    {: RESULT = new Aexp(boolvalue);  :}
                 | term:t
                     {: RESULT = t; :};
 

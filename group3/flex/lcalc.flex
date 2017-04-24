@@ -76,7 +76,7 @@ int = 0 | [1-9][0-9]*
 id = [A-Za-z_][A-Za-z_0-9]*
 
 float = {int}\.[0-9]+
-bool = true | false
+boolvalue = true|false
 
 %%
 /* ------------------------Lexical Rules Section---------------------- */
@@ -107,7 +107,7 @@ bool = true | false
     ":="               { return symbol(sym.ASG); }
     "define"           { return symbol(sym.DEFINE); }
     "int"              { return symbol(sym.TYPE, new Integer(1)); }
-    "boolean"          { return symbol(sym.TYPE, new Integer(2)); }
+    "bool"          { return symbol(sym.TYPE, new Integer(2)); }
     "float"            { return symbol(sym.TYPE, new Integer(3)); }
     "if"               { return symbol(sym.IF); }
     "then"             { return symbol(sym.THEN); }
@@ -121,6 +121,7 @@ bool = true | false
 
     {int}      { return symbol(sym.NUMBER, new Integer(yytext())); }
     {float}    { return symbol(sym.FLOAT, new Double(yytext())); }
+    {boolvalue} { return symbol(sym.BOOLVALUE, new Boolean(yytext())); } /* This is the boolean value (true or false)*/
 
     {id}       { return symbol(sym.ID, yytext());}
 

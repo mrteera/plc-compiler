@@ -1,7 +1,5 @@
-define a as int;
-define b as float;
-a := 5.0;
-b := 4.0;
-b := b * a;
-print a;
-print b;
+define p as bool;
+
+p := true;
+
+print p;
