@@ -18,7 +18,7 @@ parser code {:
 
 terminal           SEMI, COMMA, PLUS, MINUS, TIMES, DIVIDE, DOUBLEPLUS, DOUBLEMINUS, LPAREN, RPAREN, EQ, DEFINE, AS,
                    IF, THEN, PRINT, PRINTLINE, WHILE, FOR, DO, BEGIN,  END, TYPE, ASG, LCB, RCB,
-                   LT, LE, GT, GE, NE, MT, FUNCTION, RETURN;
+                   LT, LE, GT, GE, NE, MT, FUNCTION;
 terminal Integer   NUMBER;
 terminal String    ID;
 terminal Double    FLOAT;
@@ -55,7 +55,7 @@ statement       ::= assignment:s
                 | LCB statement_list:s RCB
                     {: RESULT = Astat.block(s); :}
                 | function_define:s
-                    {: RESULT = s :}
+                    {: RESULT = s; :}
                 ;
 
 vardec          ::= DEFINE:d ID:i AS:a TYPE:t
@@ -69,8 +69,9 @@ print           ::= PRINT expr:e
                     {: RESULT = Astat.print(e); :}
                 ;
 
-function_define ::= DEFINE ID:i AS:a FUNCTION:f LPAREN RPAREN
-                    {: RESULT = Astat.functionDefine(i); :}
+function_define ::= DEFINE ID:i AS:a FUNCTION:f LPAREN RPAREN statement:s
+                    {: RESULT = Astat.functionDefine(i, null, s); :}
+                ;
 
 ifthen          ::= IF expr:e THEN statement:s
                     {: RESULT = Astat.ifthen(e,s); :}

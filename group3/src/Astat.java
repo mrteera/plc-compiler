@@ -95,9 +95,15 @@ public class Astat {
         return statement;
     }
     
-    public static Astat functionDefine(String functionName){
+    String functionName;
+    Lstat paramList;
+    Astat functionBody;
+    public static Astat functionDefine(String functionName, Lstat paramList, Astat funcBody){
         Astat statement = new Astat();
-        System.out.println("Function defined !!" + functionName);
+        statement.statementType = funDeclaration;
+        statement.functionName = functionName;
+        statement.paramList = paramList;
+        statement.functionBody = funcBody;
         return statement;
     }
 
@@ -118,7 +124,7 @@ public class Astat {
     }
 
     public void execute() {
-
+//        System.out.println(statementType);
         if (statementType == assignment) {
 //            System.out.println("Assvariable " + assVariable + " assignment " + assExpr.getValue().getType());
 //            System.out.println("symbol" + SymbolTable.globalTable.get(assVariable) );
