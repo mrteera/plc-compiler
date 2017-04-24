@@ -62,6 +62,7 @@ public class Astat {
         // parser.print_error((new Integer(l.statementList.size())).toString());
         // parser.print_error((new String(l.statementList.get(0).varID)).toString());
         statement.varDeclList = l;
+        // TODO: make this work!
         //parser.print_error((new String(statement.varDeclList.statementList.get(0).varID)).toString());
         return statement;
     }
@@ -151,7 +152,7 @@ public class Astat {
 //            SymbolTable.setValue(assVariable, assExpr.getValue());
         } else if (statementType == varDeclaration) {
            // if ( !SymbolTable.isExistID(varID)) {
-           //parser.print_error((new String(varDeclList.statementList.get(0).varID)).toString());
+           //parser.print_error((new String(varDeclList.statementList.get(1).varID)).toString());
 
            for (Astat s : varDeclList.statementList) {
                //parser.print_error((new Integer(varType)).toString());

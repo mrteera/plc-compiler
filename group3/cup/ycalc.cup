@@ -59,7 +59,9 @@ statement       ::= assignment:s
 vardec          ::= DEFINE:d id_list:idl AS:a TYPE:t
                 {: RESULT = Astat.varDec((int)t, idl); :}
                 ;
-id_list         ::== ID:id
+id_list         ::== ID:id COMMA id_list:idl
+                {:    RESULT = new Lstat(idl, Astat.oneVarDec(id)); :}
+                | ID:id
                 {:    RESULT = new Lstat(Astat.oneVarDec(id)); :}
                 ;
 while           ::= WHILE LPAREN expr:e RPAREN LCB statement:s RCB
