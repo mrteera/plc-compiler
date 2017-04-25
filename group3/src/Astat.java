@@ -173,7 +173,19 @@ public class Astat {
                     //System.out.println("hello2");
                     //System.out.println("s.assVariable: " + s.assVariable);
                     //System.out.println("assExpr.getValue: " + s.assExpr.getValue());
-                    SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
+                    //SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
+                    if((s.assExpr.getValue().getType() == Variable.ValType.INT) && (((Variable)SymbolTable.globalTable.getValue(s.assVariable)).getType() == Variable.ValType.INT)){
+                        SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
+                    }
+                    else if((s.assExpr.getValue().getType() == Variable.ValType.BOOL) && (((Variable)SymbolTable.globalTable.getValue(s.assVariable)).getType() == Variable.ValType.BOOL)){
+                        SymbolTable.setValue(s.assVariable, s.assExpr.getValue());  
+                    }
+                    else if((s.assExpr.getValue().getType() == Variable.ValType.FLOAT) && ((((Variable)SymbolTable.globalTable.getValue(s.assVariable)).getType() == Variable.ValType.FLOAT))){
+                        SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
+                    }
+                    else {
+                        parser.print_error("Variable Type mismatch");
+                    }
                }
                //SymbolTable.setValue(assVariable, assExpr.getValue());
            }
