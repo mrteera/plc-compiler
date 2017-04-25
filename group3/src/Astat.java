@@ -3,8 +3,8 @@ package src;
 import java.time.Clock;
 
 public class Astat {
-
     int statementType;
+    int assignmentStatementType = 999;
     public static int assignment = 0;
     public static int varDeclaration = 1;
     public static int print = 2;
@@ -22,7 +22,10 @@ public class Astat {
     public static Astat assignment(String Variable, Aexp expr) {
         Astat statement = new Astat();
         statement.statementType = assignment;
+        statement.assignmentStatementType = assignment;
         statement.assVariable = Variable;
+        // parser.print_error(expr.getValue().toString()); // true
+        //System.out.println("assignemnt, value: " + expr.getValue().toString());
         statement.assExpr = expr;
         return statement;
     }
@@ -44,17 +47,40 @@ public class Astat {
     }
     
     
+//    Integer varType;
+//    String varID;
+//    //Aexp varExpr;
+//    public static Astat varDec(int type, String id) {
+//        Astat statement = new Astat();
+//        statement.statementType = varDeclaration;
+//        statement.varType = type;
+//        statement.varID = id;
+//        return statement;
+//    }
+    
     Integer varType;
-    String varID;
-    //Aexp varExpr;
-    public static Astat varDec(int type, String id) {
+    Lstat varDeclList;
+    public static Astat varDec(int type, Lstat l) {
         Astat statement = new Astat();
         statement.statementType = varDeclaration;
         statement.varType = type;
-        statement.varID = id;
+        // parser.print_error(l.statementList.getClass().getName());
+        // parser.print_error((new Integer(l.statementList.size())).toString());
+        //parser.print_error((new String(l.statementList.get(0).assVariable)).toString());
+        //System.out.println("Varname: " + (new String(l.statementList.get(0).assVariable)).toString());
+        statement.varDeclList = l;
+        //parser.print_error((new String(statement.varDeclList.statementList.get(0).varID)).toString());
+        // System.out.println("l: " + (new String(statement.varDeclList.statementList.get(0).varID)).toString());
         return statement;
     }
     
+//    String varID;
+    public static Astat oneVarDec(String id) {
+        Astat statement = new Astat();
+        statement.statementType = varDeclaration;
+        statement.assVariable = id;
+        return statement;
+    }
     /*
      * if then statement: if ifcondition then ifbody
      *
@@ -114,6 +140,9 @@ public class Astat {
     }
 
     public void execute() {
+        // parser.print_error(statementType);
+        //System.out.println("statementType: " + statementType);
+        // parser.print_error((new String(l.statementList.get(0).assVariable)).toString());
 
         if (statementType == assignment) {
 //            System.out.println("Assvariable " + assVariable + " assignment " + assExpr.getValue().getType());
@@ -132,11 +161,25 @@ public class Astat {
             }
 //            SymbolTable.setValue(assVariable, assExpr.getValue());
         } else if (statementType == varDeclaration) {
-            if ( !SymbolTable.isExistID(varID)) {
-               SymbolTable.setType(this.varType, this.varID);
-            } else {
-                System.err.println("Duplicate ID: " + this.varID);
-            }
+           // if ( !SymbolTable.isExistID(varID)) {
+           // parser.print_error((new String(varDeclList.statementList.get(0).varID)).toString());
+
+           for (Astat s : varDeclList.statementList) {
+               // parser.print_error((new Integer(varType)).toString());
+               // parser.print_error(assExpr.toString());
+               // System.out.println("assignemntStatementType: " + s.assignmentStatementType);
+               SymbolTable.setType(varType, s.assVariable);
+               if (s.assignmentStatementType == assignment) {
+                    //System.out.println("hello2");
+                    //System.out.println("s.assVariable: " + s.assVariable);
+                    //System.out.println("assExpr.getValue: " + s.assExpr.getValue());
+                    SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
+               }
+               //SymbolTable.setValue(assVariable, assExpr.getValue());
+           }
+          //  } else {
+            //    System.err.println("Duplicate ID: " + this.varID);
+           // }
         } else if (statementType == ifthen) {
 
             if (ifcondition.getValue() != null) {
