@@ -13,6 +13,7 @@ public class Astat {
     public static int whileloop = 5;
     public static int funDeclaration = 6;
     public static int returnStatement = 7;
+    public static int forloop = 8;
     /*
      * assignment statement: variable = expr
      *
@@ -44,6 +45,20 @@ public class Astat {
         statement.whileBody = WhileBody;
         return statement;
 
+    }
+    
+    Astat forVarDecl;
+    Aexp forCondition;
+    Astat forVarAssgList;
+    Astat forBody;
+    public static Astat forloop(Astat varDecl, Aexp condition, Astat varAssgList, Astat forBody) {
+        Astat statement = new Astat();
+        statement.statementType = forloop;
+        statement.forVarDecl = varDecl;
+        statement.forCondition = condition;
+        statement.forVarAssgList = varAssgList;
+        statement.forBody = forBody;
+        return statement;
     }
     
     
@@ -132,6 +147,8 @@ public class Astat {
             return "print " + printE.getexp();
         } else if (statementType == whileloop) {
             return "while (" + whileCondition.getexp() + ") " + whileBody.getstat();
+        } else if (statementType == forloop) {
+           return "for (" + forVarDecl.getstat() + "; " + forCondition.getexp() + "; " + forVarAssgList.getstat() + ") " + forBody.getstat();
         } else if (statementType == block) {
             return "{ " + blockBody.getstat() + " }";
         } else {
@@ -140,11 +157,12 @@ public class Astat {
     }
 
     public void execute() {
-        // parser.print_error(statementType);
-        //System.out.println("statementType: " + statementType);
-        // parser.print_error((new String(l.statementList.get(0).assVariable)).toString());
+//         parser.print_error(statementType);
+//         System.out.println("statementType: " + statementType);
+//         parser.print_error((new String(l.statementList.get(0).assVariable)).toString());
 
         if (statementType == assignment) {
+//            
 //            System.out.println("Assvariable " + assVariable + " assignment " + assExpr.getValue().getType());
 //            System.out.println("symbol" + SymbolTable.globalTable.get(assVariable) );
             if((assExpr.getValue().getType() == Variable.ValType.INT) && (((Variable)SymbolTable.globalTable.getValue(assVariable)).getType() == Variable.ValType.INT)){
@@ -204,6 +222,18 @@ public class Astat {
 
                 if (whileCondition.getValue().getBoolVal() != false) {
                     whileBody.execute();
+                } else {
+                    break;
+                }
+
+            }
+
+        } else if (statementType == forloop) {
+            forVarDecl.execute();
+            for (;;) {
+                if (forCondition.getValue().getBoolVal() != false) {
+                    forBody.execute();
+                    forVarAssgList.execute();
                 } else {
                     break;
                 }

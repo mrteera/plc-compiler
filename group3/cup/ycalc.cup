@@ -25,7 +25,7 @@ terminal Double    FLOAT;
 terminal Boolean   BOOLVALUE; 
 
 non terminal Object             program;
-non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec, assign;
+non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec, assign, for;
 non terminal Lstat              statement_list, id_list;
 non terminal Aexp               expr, term, compare, factor;
 
@@ -52,6 +52,8 @@ statement       ::= assignment:s
                     {: RESULT = s; :}
                 | while:s
                     {: RESULT = s; :}
+                | for:s
+                    {: RESULT = s; :}
                 | LCB statement_list:s RCB
                     {: RESULT = Astat.block(s); :}
                 ;
@@ -59,6 +61,7 @@ statement       ::= assignment:s
 vardec          ::= DEFINE:d id_list:idl AS:a TYPE:t
                 {: RESULT = Astat.varDec((int)t, idl); :}
                 ;
+
 id_list         ::== ID:id COMMA id_list:idl
                 {:    RESULT = new Lstat(idl, Astat.oneVarDec(id)); :}
                 | assignment:assign COMMA id_list:idl
@@ -68,8 +71,13 @@ id_list         ::== ID:id COMMA id_list:idl
                 | ID:id
                 {:    RESULT = new Lstat(Astat.oneVarDec(id)); :}
                 ;
+
 while           ::= WHILE LPAREN expr:e RPAREN statement:s
                     {: RESULT = Astat.whileloop(e,s); :}
+                ;
+
+for             ::= FOR LPAREN vardec:v SEMI compare:c SEMI assignment:a RPAREN statement:s
+                    {: RESULT = Astat.forloop(v,c,a,s); :}
                 ;
 
 print           ::= PRINT expr:e
