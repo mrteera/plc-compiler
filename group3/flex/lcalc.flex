@@ -115,6 +115,9 @@ boolvalue = true|false
     ">"                { return symbol(sym.GT); }
     ">="               { return symbol(sym.GE); }
     "!="               { return symbol(sym.NE); }
+    "and"              { return symbol(sym.AND); }
+    "or"               { return symbol(sym.OR); }
+    "not"              { return symbol(sym.NOT); }
     "define"           { return symbol(sym.DEFINE); }
     "int"              { return symbol(sym.TYPE, new Integer(1)); }
     "bool"             { return symbol(sym.TYPE, new Integer(2)); }

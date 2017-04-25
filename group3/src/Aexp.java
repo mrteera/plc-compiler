@@ -64,23 +64,32 @@ public class Aexp {
             case ID: s = id; break;
             case EXP:
                 switch (operator) {
+                    case sym.OR: 
+                        s = "OR(" + operands.getfi().getexp() + ", " + operands.getse().getexp() + ")"; 
+                        break;
+                    case sym.AND: 
+                        s = "AND(" + operands.getfi().getexp() + ", " + operands.getse().getexp() + ")"; 
+                        break;
+                    case sym.NOT: 
+                        s = "NEGATE(" + operands.getfi().getexp() + ")"; 
+                        break;
                     case sym.EQ: 
-                        s = "EQ(" + operands.getfi().getexp() + ", " + operands.getfi().getexp() + ")"; 
+                        s = "EQ(" + operands.getfi().getexp() + ", " + operands.getse().getexp() + ")"; 
                         break;
                     case sym.NE: 
-                        s = "NE(" + operands.getfi().getexp() + ", " + operands.getfi().getexp() + ")"; 
+                        s = "NE(" + operands.getfi().getexp() + ", " + operands.getse().getexp() + ")"; 
                         break;
                     case sym.LT: 
-                        s = "LT(" + operands.getfi().getexp() + ", " + operands.getfi().getexp() + ")"; 
+                        s = "LT(" + operands.getfi().getexp() + ", " + operands.getse().getexp() + ")"; 
                         break;
                     case sym.LE: 
-                        s = "LE(" + operands.getfi().getexp() + ", " + operands.getfi().getexp() + ")"; 
+                        s = "LE(" + operands.getfi().getexp() + ", " + operands.getse().getexp() + ")"; 
                         break;
                     case sym.GT: 
-                        s = "GT(" + operands.getfi().getexp() + ", " + operands.getfi().getexp() + ")"; 
+                        s = "GT(" + operands.getfi().getexp() + ", " + operands.getse().getexp() + ")"; 
                         break;
                     case sym.GE: 
-                        s = "GE(" + operands.getfi().getexp() + ", " + operands.getfi().getexp() + ")"; 
+                        s = "GE(" + operands.getfi().getexp() + ", " + operands.getse().getexp() + ")"; 
                         break;
                     case sym.PLUS:
                         s = "PLUS(" + operands.getfi().getexp() + "," + operands.getse().getexp() + ")";
@@ -133,6 +142,15 @@ public class Aexp {
                     //case sym.PLUS:
                         //val = operands.getfi().getValue() + operands.getse().getValue();
                         //break;
+                    case sym.OR: 
+                        val = operands.getfi().getValue().or(operands.getse().getValue());
+                        break;
+                    case sym.AND: 
+                        val = operands.getfi().getValue().and(operands.getse().getValue()); 
+                        break;
+                    case sym.NOT: 
+                        val = operands.getfi().getValue().not(); 
+                        break;
                     case sym.EQ: 
                         val = operands.getfi().getValue().eq(operands.getse().getValue()); 
                         break;

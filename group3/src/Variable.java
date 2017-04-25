@@ -56,23 +56,23 @@ public class Variable {
         }
     }
                             
-//    public Variable or(Variable x) {
-//        if (vType == ValType.BOOL && x.vType == ValType.BOOL) {
-//            return new Variable(boolVal || x.boolVal);
-//        } else {
-//            parser.print_error("Type mismatch at ' |(OR) '");
-//        }
-//        return this;
-//    }
+    public Variable or(Variable x) {
+        if (vType == ValType.BOOL && x.vType == ValType.BOOL) {
+            return new Variable(boolVal || x.boolVal);
+        } else {
+            parser.print_error("Type mismatch at ' |(OR) '");
+        }
+        return this;
+    }
     
-//    public Variable and(Variable x) {
-//        if (vType == ValType.BOOL && x.vType == ValType.BOOL) {
-//            return new Variable(boolVal && x.boolVal);
-//        } else {
-//            parser.print_error("Type mismatch at ' &(AND) '");
-//        }
-//        return this;
-//    }
+    public Variable and(Variable x) {
+        if (vType == ValType.BOOL && x.vType == ValType.BOOL) {
+            return new Variable(boolVal && x.boolVal);
+        } else {
+            parser.print_error("Type mismatch at ' &(AND) '");
+        }
+        return this;
+    }
     
     public Variable eq(Variable x) {
         if (vType == ValType.BOOL && x.vType == ValType.BOOL) {
@@ -196,14 +196,14 @@ public class Variable {
         return this;
     }
     
-//    public Variable not() {
-//        if (vType == ValType.BOOL) {
-//            return new Variable(!boolVal);
-//        } else {
-//            parser.print_error("Type mismatch at ' ! '");
-//        }
-//        return this;
-//    }
+    public Variable not() {
+        if (vType == ValType.BOOL) {
+            return new Variable(!boolVal);
+        } else {
+            parser.print_error("Type mismatch at ' ! '");
+        }
+        return this;
+    }
     
    
 }
