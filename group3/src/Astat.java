@@ -15,6 +15,8 @@ public class Astat {
     public static int returnStatement = 7;
     public static int forloop = 8;
     public static int funCall = 9;
+    public static int printline = 10;
+
     /*
      * assignment statement: variable = expr
      *
@@ -119,12 +121,16 @@ public class Astat {
     Aexp printE;
 
     public static Astat print(Aexp expr) {
-
         Astat statement = new Astat();
         statement.statementType = print;
         statement.printE = expr;
         return statement;
-
+    }
+    
+    public static Astat printline() {
+        Astat statement = new Astat();
+        statement.statementType = printline;
+        return statement;
     }
 
     /*
@@ -276,8 +282,10 @@ public class Astat {
 
         } else if (statementType == print) {
 
-            System.out.println(printE.getValue());
+            System.out.print(printE.getValue());
 
+        } else if (statementType == printline) {
+            System.out.println();
         } else if (statementType == block) {
             for (Astat s : blockBody.statementList) {
                 s.execute();

@@ -86,6 +86,8 @@ for             ::= FOR LPAREN vardec:v SEMI compare:c SEMI assignment:a RPAREN 
 
 print           ::= PRINT expr:e
                     {: RESULT = Astat.print(e); :}
+                | PRINTLINE
+                    {: RESULT = Astat.printline(); :}
                 ;
 
 function_define ::= DEFINE id_list:i AS FUNCTION LPAREN RPAREN statement:s
