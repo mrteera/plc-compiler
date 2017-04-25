@@ -27,7 +27,7 @@ terminal Boolean   BOOLVALUE;
 non terminal Object             program;
 non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
 non terminal Lstat              statement_list;
-non terminal Aexp               expr, factor, term;
+non terminal Aexp               expr, term, compare, factor;
 
 program         ::= statement_list:s
                     {: s.execute(); :};
@@ -52,14 +52,14 @@ statement       ::= assignment:s
                     {: RESULT = s; :}
                 | while:s
                     {: RESULT = s; :}
-                | BEGIN statement_list:s END
+                | LCB statement_list:s RCB
                     {: RESULT = Astat.block(s); :}
                 ;
 
 vardec          ::= DEFINE:d ID:i AS:a TYPE:t
-                {: RESULT = Astat.varDec((int)t, i); :}
+                    {: RESULT = Astat.varDec((int)t, i); :}
                 ;
-while           ::= WHILE LPAREN expr:e RPAREN LCB statement:s RCB
+while           ::= WHILE LPAREN expr:e RPAREN statement:s
                     {: RESULT = Astat.whileloop(e,s); :}
                 ;
 
@@ -87,6 +87,21 @@ term            ::= term:t TIMES factor:f
                     {: RESULT = new Aexp(new Args(t,f), sym.TIMES); :}
                 | term:t DIVIDE factor:f
                     {: RESULT = new Aexp(new Args(t,f), sym.DIVIDE); :}
+                | compare:c
+                    {: RESULT = c; :};
+
+compare         ::= compare:c1 EQ factor:f1 
+                    {: RESULT = new Aexp(new Args(c1, f1), sym.EQ); :}
+                | compare:c1 NE factor:f1 
+                    {: RESULT = new Aexp(new Args(c1, f1), sym.NE); :}
+                | compare:c1 LT factor:f1 
+                    {: RESULT = new Aexp(new Args(c1, f1), sym.LT); :}
+                | compare:c1 LE factor:f1 
+                    {: RESULT = new Aexp(new Args(c1, f1), sym.LE); :}
+                | compare:c1 GT factor:f1 
+                    {: RESULT = new Aexp(new Args(c1, f1), sym.GT); :}
+                | compare:c1 GE factor:f1 
+                    {: RESULT = new Aexp(new Args(c1, f1), sym.GE); :}
                 | factor:f
                     {: RESULT = f; :};
 

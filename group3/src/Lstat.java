@@ -16,6 +16,14 @@ public class Lstat {
         statementList = l.statementList;
         statementList.add(s);
     }
+    
+    public String getstat() {
+        String s = "";
+        for (Astat astat : statementList) {
+            s += astat.getstat();
+        }
+        return s;
+    }
 
     public void execute(){
         for (Astat astat : statementList) {

@@ -17,7 +17,17 @@ public class SymbolTable extends Hashtable<String,Object>{
 
     static Variable getValue(String id){
         //return (Integer) globalTable.get(id);
-        return (Variable) globalTable.get(id);
+        if (globalTable.get(id).getClass() == Variable.class )
+            return (Variable) globalTable.get(id);
+        else {
+            if ((int)globalTable.get(id) == 1)
+                return new Variable(1);
+            else if((int)globalTable.get(id) == 2)
+                return new Variable(true);
+            else if((int)globalTable.get(id) == 3)
+                return new Variable(1.0);
+        }
+        return null;
     }
     
     static Integer getType(String id) {
