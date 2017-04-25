@@ -74,75 +74,75 @@ public class Variable {
 //        return this;
 //    }
     
-//    public Variable eq(Variable x) {
-//        if (vType == ValType.BOOL && x.vType == ValType.BOOL) {
-//            return new Variable(boolVal.equals(x.boolVal));
-//        } else if (vType == ValType.INT && x.vType == ValType.INT) {
-//            return new Variable(intVal.equals(x.intVal));
-//        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
-//            return new Variable(floatVal.equals(x.floatVal));
-//        } else {
-//            parser.print_error("Type mismatch at ' eq ' operator");
-//        }
-//        return this;
-//    }
+    public Variable eq(Variable x) {
+        if (vType == ValType.BOOL && x.vType == ValType.BOOL) {
+            return new Variable(boolVal.equals(x.boolVal));
+        } else if (vType == ValType.INT && x.vType == ValType.INT) {
+            return new Variable(intVal.equals(x.intVal));
+        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
+            return new Variable(floatVal.equals(x.floatVal));
+        } else {
+            parser.print_error("Type mismatch at ' eq ' operator");
+        }
+        return this;
+    }
     
-//    public Variable ne(Variable x) {
-//        if (vType == ValType.BOOL && x.vType == ValType.BOOL) {
-//            return new Variable(!boolVal.equals(x.boolVal));
-//        } else if (vType == ValType.INT && x.vType == ValType.INT) {
-//            return new Variable(!intVal.equals(x.intVal));
-//        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
-//            return new Variable(!floatVal.equals(x.floatVal));
-//        } else {
-//            parser.print_error("Type mismatch at ' ne '");
-//        }
-//        return this;
-//    }
+    public Variable ne(Variable x) {
+        if (vType == ValType.BOOL && x.vType == ValType.BOOL) {
+            return new Variable(!boolVal.equals(x.boolVal));
+        } else if (vType == ValType.INT && x.vType == ValType.INT) {
+            return new Variable(!intVal.equals(x.intVal));
+        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
+            return new Variable(!floatVal.equals(x.floatVal));
+        } else {
+            parser.print_error("Type mismatch at ' ne '");
+        }
+        return this;
+    }
     
-//    public Variable lt(Variable x) {
-//        if (vType == ValType.INT && x.vType == ValType.INT) {
-//            return new Variable(intVal < x.intVal);
-//        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
-//            return new Variable(floatVal < x.floatVal);
-//        } else {
-//            parser.print_error("Type mismatch at ' lt '");
-//        }
-//        return this;
-//    }
+    public Variable lt(Variable x) {
+        if (vType == ValType.INT && x.vType == ValType.INT) {
+            return new Variable(intVal < x.intVal);
+        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
+            return new Variable(floatVal < x.floatVal);
+        } else {
+            parser.print_error("Type mismatch at ' lt '");
+        }
+        return this;
+    }
     
-//    public Variable le(Variable x) {
-//        if (vType == ValType.INT && x.vType == ValType.INT) {
-//            return new Variable(intVal <= x.intVal);
-//        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
-//            return new Variable(floatVal <= x.floatVal);
-//        } else {
-//            parser.print_error("Type mismatch at ' le '");
-//        }
-//        return this;
-//    }
-//    
-//    public Variable gt(Variable x) {
-//        if (vType == ValType.INT && x.vType == ValType.INT) {
-//            return new Variable(intVal > x.intVal);
-//        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
-//            return new Variable(floatVal > x.floatVal);
-//        } else {
-//            parser.print_error("Type mismatch at ' gt '");
-//        }
-//        return this;
-//    }
+    public Variable le(Variable x) {
+        if (vType == ValType.INT && x.vType == ValType.INT) {
+            return new Variable(intVal <= x.intVal);
+        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
+            return new Variable(floatVal <= x.floatVal);
+        } else {
+            parser.print_error("Type mismatch at ' le '");
+        }
+        return this;
+    }
+   
+    public Variable gt(Variable x) {
+        if (vType == ValType.INT && x.vType == ValType.INT) {
+            return new Variable(intVal > x.intVal);
+        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
+            return new Variable(floatVal > x.floatVal);
+        } else {
+            parser.print_error("Type mismatch at ' gt '");
+        }
+        return this;
+    }
     
-//    public Variable ge(Variable x) {
-//        if (vType == ValType.INT && x.vType == ValType.INT) {
-//            return new Variable(intVal >= x.intVal);
-//        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
-//            return new Variable(floatVal >= x.floatVal);
-//        } else {
-//            parser.print_error("Type mismatch at ' ge '");
-//        }
-//        return this;
-//    }
+    public Variable ge(Variable x) {
+        if (vType == ValType.INT && x.vType == ValType.INT) {
+            return new Variable(intVal >= x.intVal);
+        } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
+            return new Variable(floatVal >= x.floatVal);
+        } else {
+            parser.print_error("Type mismatch at ' ge '");
+        }
+        return this;
+    }
     
     public Variable plus(Variable x) {
         if (vType == ValType.INT && x.vType == ValType.INT) {

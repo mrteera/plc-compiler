@@ -1,5 +1,7 @@
 package src;
 
+import java.time.Clock;
+
 public class Astat {
 
     int statementType;
@@ -97,15 +99,15 @@ public class Astat {
 
     public String getstat() {
         if (statementType == assignment) {
-            return assVariable + "=" + assExpr.getexp();
+            return assVariable + ":=" + assExpr.getexp();
         } else if (statementType == ifthen) {
             return "if " + ifcondition.getexp() + " " + ifbody.getstat();
         } else if (statementType == print) {
             return "print " + printE.getexp();
         } else if (statementType == whileloop) {
-            return "while " + whileCondition.getexp() + " do " + whileBody.getstat();
+            return "while (" + whileCondition.getexp() + ") " + whileBody.getstat();
         } else if (statementType == block) {
-            return "block";
+            return "{ " + blockBody.getstat() + " }";
         } else {
             return "unknown";
         }
@@ -116,13 +118,13 @@ public class Astat {
         if (statementType == assignment) {
 //            System.out.println("Assvariable " + assVariable + " assignment " + assExpr.getValue().getType());
 //            System.out.println("symbol" + SymbolTable.globalTable.get(assVariable) );
-            if((assExpr.getValue().getType() == Variable.ValType.INT) && ((int)SymbolTable.globalTable.get(assVariable) == 1)){
+            if((assExpr.getValue().getType() == Variable.ValType.INT) && (((Variable)SymbolTable.globalTable.getValue(assVariable)).getType() == Variable.ValType.INT)){
                 SymbolTable.setValue(assVariable, assExpr.getValue());
             }
-            else if((assExpr.getValue().getType() == Variable.ValType.BOOL) && ((int)SymbolTable.globalTable.get(assVariable) == 2)){
+            else if((assExpr.getValue().getType() == Variable.ValType.BOOL) && (((Variable)SymbolTable.globalTable.getValue(assVariable)).getType() == Variable.ValType.BOOL)){
                 SymbolTable.setValue(assVariable, assExpr.getValue());  
             }
-            else if((assExpr.getValue().getType() == Variable.ValType.FLOAT) && ((int)SymbolTable.globalTable.get(assVariable) == 3)){
+            else if((assExpr.getValue().getType() == Variable.ValType.FLOAT) && ((((Variable)SymbolTable.globalTable.getValue(assVariable)).getType() == Variable.ValType.FLOAT))){
                 SymbolTable.setValue(assVariable, assExpr.getValue());
             }
             else {
@@ -145,7 +147,7 @@ public class Astat {
 
             for (;;) {
 
-                if (whileCondition.getValue() != null) {
+                if (whileCondition.getValue().getBoolVal() != false) {
                     whileBody.execute();
                 } else {
                     break;
