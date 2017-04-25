@@ -16,16 +16,16 @@ parser code {:
 :}
 
 
-terminal           SEMI, COMMA, PLUS, MINUS, TIMES, DIVIDE, DOUBLEPLUS, DOUBLEMINUS, LPAREN, RPAREN, EQ, DEFINE, AS,
-                   IF, THEN, PRINT, PRINTLINE, WHILE, FOR, DO, BEGIN,  END, TYPE, ASG, LCB, RCB,
-                   LT, LE, GT, GE, NE, AND, OR, NOT, MT, FUNCTION;
+terminal           SEMI, COMMA, PLUS, MINUS, TIMES, DIVIDE, DOUBLEPLUS, DOUBLEMINUS, LPAREN, RPAREN, EQ, DEFINE, AS;
+terminal           IF, THEN, PRINT, PRINTLINE, WHILE, FOR, DO, BEGIN,  END, TYPE, ASG, LCB, RCB;
+terminal           LT, LE, GT, GE, NE, AND, OR, NOT, MT, FUNCTION;
 terminal Integer   NUMBER;
 terminal String    ID;
 terminal Double    FLOAT;
 terminal Boolean   BOOLVALUE; 
 
 non terminal Object             program;
-non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec, assign, for;
+non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec, assign, for, function_define, function_call;
 non terminal Lstat              statement_list, id_list;
 non terminal Aexp               expr, compare, pm, term, factor;
 
@@ -56,13 +56,17 @@ statement       ::= assignment:s
                     {: RESULT = s; :}
                 | LCB statement_list:s RCB
                     {: RESULT = Astat.block(s); :}
+                | function_define:s
+                    {: RESULT = s; :}
+                | function_call:s 
+                    {: RESULT = s; :}
                 ;
 
-vardec          ::= DEFINE:d id_list:idl AS:a TYPE:t
+vardec          ::= DEFINE:d id_list:idl AS TYPE:t
                 {: RESULT = Astat.varDec((int)t, idl); :}
                 ;
 
-id_list         ::== ID:id COMMA id_list:idl
+id_list         ::= ID:id COMMA id_list:idl
                 {:    RESULT = new Lstat(idl, Astat.oneVarDec(id)); :}
                 | assignment:assign COMMA id_list:idl
                 {:    RESULT = new Lstat(idl, assign); :}
@@ -84,6 +88,14 @@ print           ::= PRINT expr:e
                     {: RESULT = Astat.print(e); :}
                 ;
 
+function_define ::= DEFINE id_list:i AS FUNCTION LPAREN RPAREN statement:s
+                    {: RESULT = Astat.functionDefine(i, null, s); :}
+                ;
+
+function_call   ::= ID:i LPAREN RPAREN
+                    {: RESULT = Astat.functionCall(i, null); :}
+                ;
+
 ifthen          ::= IF expr:e THEN statement:s
                     {: RESULT = Astat.ifthen(e,s); :}
                 ;
@@ -94,7 +106,9 @@ assignment      ::= ID:i ASG expr:e
                 ;
 
 expr            ::= compare:c
-                    {: RESULT = c; :};
+                    {: RESULT = c; :}
+                | function_call:s
+                    {: RESULT = new Aexp(s); :};
 
 compare         ::= compare:c1 EQ pm:p1 
                     {: RESULT = new Aexp(new Args(c1, p1), sym.EQ); :}
