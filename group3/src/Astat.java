@@ -11,6 +11,7 @@ public class Astat {
     public static int whileloop = 5;
     public static int funDeclaration = 6;
     public static int returnStatement = 7;
+    public static int funCall = 8;
     /*
      * assignment statement: variable = expr
      *
@@ -106,6 +107,21 @@ public class Astat {
         statement.functionBody = funcBody;
         return statement;
     }
+    public String getFunctionName(){
+        return functionName;
+    }
+    
+    Listexp argList;
+    public static Astat functionCall(String functionName, Listexp args){
+        Astat statement = new Astat();
+        statement.statementType = funCall;
+        statement.functionName = functionName;
+        statement.argList = args;
+        return statement;
+    }
+    public Listexp getArgList(){
+        return argList;
+    }
 
     public String getstat() {
         if (statementType == assignment) {
@@ -118,6 +134,10 @@ public class Astat {
             return "while " + whileCondition.getexp() + " do " + whileBody.getstat();
         } else if (statementType == block) {
             return "block";
+        } else if (statementType == funDeclaration) {
+            return "define " + functionName + " as function() " + functionBody.getstat();
+        } else if (statementType == funCall){
+            return functionName + "(" + argList.getExp() + ")";
         } else {
             return "unknown";
         }
@@ -173,6 +193,12 @@ public class Astat {
             for (Astat s : blockBody.statementList) {
                 s.execute();
             }
+        }else if (statementType == funDeclaration){
+            SymbolTable.setFunction(functionName, new Aexp(this));
+        }
+        else if(statementType == funCall){
+            Astat functDeclared = SymbolTable.getFunction(functionName).getFuncStatement();
+            functDeclared.functionBody.execute();
         }
     }
 }

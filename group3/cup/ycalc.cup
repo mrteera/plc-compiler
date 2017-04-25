@@ -25,7 +25,7 @@ terminal Double    FLOAT;
 terminal Boolean   BOOLVALUE; 
 
 non terminal Object             program;
-non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec, function_define;
+non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec, function_define, function_call;
 non terminal Lstat              statement_list;
 non terminal Aexp               expr, factor, term;
 
@@ -56,6 +56,8 @@ statement       ::= assignment:s
                     {: RESULT = Astat.block(s); :}
                 | function_define:s
                     {: RESULT = s; :}
+                | function_call:s 
+                    {: RESULT = s; :}
                 ;
 
 vardec          ::= DEFINE:d ID:i AS:a TYPE:t
@@ -73,6 +75,10 @@ function_define ::= DEFINE ID:i AS:a FUNCTION:f LPAREN RPAREN statement:s
                     {: RESULT = Astat.functionDefine(i, null, s); :}
                 ;
 
+function_call   ::= ID:i LPAREN RPAREN
+                    {: RESULT = Astat.functionCall(i, null); :}
+                ;
+
 ifthen          ::= IF expr:e THEN statement:s
                     {: RESULT = Astat.ifthen(e,s); :}
                 ;
@@ -86,6 +92,8 @@ expr            ::= expr:e PLUS term:t
                     {: RESULT = new Aexp(new Args(e,t), sym.PLUS); :}
                 | expr:e MINUS term:t
                     {: RESULT = new Aexp(new Args(e,t), sym.MINUS); :}
+                | function_call:s
+                    {: RESULT = new Aexp(s); :}
                 | term:t
                     {: RESULT = t; :};
 

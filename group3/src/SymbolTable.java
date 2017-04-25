@@ -14,6 +14,14 @@ public class SymbolTable extends Hashtable<String,Object>{
         // System.out.println("==============");
         // System.out.println(((Variable)globalTable.get(id)).getType());
     }
+    
+    static void setFunction(String id, Aexp value){
+        globalTable.put(id, value);
+    }
+    
+    static Aexp getFunction(String id){
+        return (Aexp) globalTable.get(id);
+    }
 
     static Variable getValue(String id){
         //return (Integer) globalTable.get(id);
