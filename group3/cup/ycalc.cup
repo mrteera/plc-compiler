@@ -25,7 +25,7 @@ terminal Double    FLOAT;
 terminal Boolean   BOOLVALUE; 
 
 non terminal Object             program;
-non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
+non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec, assign;
 non terminal Lstat              statement_list, id_list;
 non terminal Aexp               expr, factor, term;
 
@@ -61,6 +61,10 @@ vardec          ::= DEFINE:d id_list:idl AS:a TYPE:t
                 ;
 id_list         ::== ID:id COMMA id_list:idl
                 {:    RESULT = new Lstat(idl, Astat.oneVarDec(id)); :}
+                | assignment:assign COMMA id_list:idl
+                {:    RESULT = new Lstat(idl, assign); :}
+                | assignment:assign
+                {:    RESULT = new Lstat(assign); :}
                 | ID:id
                 {:    RESULT = new Lstat(Astat.oneVarDec(id)); :}
                 ;

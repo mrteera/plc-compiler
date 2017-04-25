@@ -2,6 +2,7 @@ package src;
 
 public class Astat {
     int statementType;
+    int assignmentStatementType = 999;
     public static int assignment = 0;
     public static int varDeclaration = 1;
     public static int print = 2;
@@ -19,7 +20,10 @@ public class Astat {
     public static Astat assignment(String Variable, Aexp expr) {
         Astat statement = new Astat();
         statement.statementType = assignment;
+        statement.assignmentStatementType = assignment;
         statement.assVariable = Variable;
+        // parser.print_error(expr.getValue().toString()); // true
+        //System.out.println("assignemnt, value: " + expr.getValue().toString());
         statement.assExpr = expr;
         return statement;
     }
@@ -60,18 +64,19 @@ public class Astat {
         statement.varType = type;
         // parser.print_error(l.statementList.getClass().getName());
         // parser.print_error((new Integer(l.statementList.size())).toString());
-        // parser.print_error((new String(l.statementList.get(0).varID)).toString());
+        //parser.print_error((new String(l.statementList.get(0).assVariable)).toString());
+        //System.out.println("Varname: " + (new String(l.statementList.get(0).assVariable)).toString());
         statement.varDeclList = l;
-        // TODO: make this work!
         //parser.print_error((new String(statement.varDeclList.statementList.get(0).varID)).toString());
+        // System.out.println("l: " + (new String(statement.varDeclList.statementList.get(0).varID)).toString());
         return statement;
     }
     
-    String varID;
+//    String varID;
     public static Astat oneVarDec(String id) {
         Astat statement = new Astat();
         statement.statementType = varDeclaration;
-        statement.varID = id;
+        statement.assVariable = id;
         return statement;
     }
     /*
@@ -133,6 +138,9 @@ public class Astat {
     }
 
     public void execute() {
+        // parser.print_error(statementType);
+        //System.out.println("statementType: " + statementType);
+        // parser.print_error((new String(l.statementList.get(0).assVariable)).toString());
 
         if (statementType == assignment) {
 //            System.out.println("Assvariable " + assVariable + " assignment " + assExpr.getValue().getType());
@@ -141,6 +149,7 @@ public class Astat {
                 SymbolTable.setValue(assVariable, assExpr.getValue());
             }
             else if((assExpr.getValue().getType() == Variable.ValType.BOOL) && ((int)SymbolTable.globalTable.get(assVariable) == 2)){
+                parser.print_error(assExpr.getValue().toString());
                 SymbolTable.setValue(assVariable, assExpr.getValue());  
             }
             else if((assExpr.getValue().getType() == Variable.ValType.FLOAT) && ((int)SymbolTable.globalTable.get(assVariable) == 3)){
@@ -152,11 +161,20 @@ public class Astat {
 //            SymbolTable.setValue(assVariable, assExpr.getValue());
         } else if (statementType == varDeclaration) {
            // if ( !SymbolTable.isExistID(varID)) {
-           //parser.print_error((new String(varDeclList.statementList.get(1).varID)).toString());
+           // parser.print_error((new String(varDeclList.statementList.get(0).varID)).toString());
 
            for (Astat s : varDeclList.statementList) {
-               //parser.print_error((new Integer(varType)).toString());
-               SymbolTable.setType(varType, s.varID);
+               // parser.print_error((new Integer(varType)).toString());
+               // parser.print_error(assExpr.toString());
+               // System.out.println("assignemntStatementType: " + s.assignmentStatementType);
+               SymbolTable.setType(varType, s.assVariable);
+               if (s.assignmentStatementType == assignment) {
+                    //System.out.println("hello2");
+                    //System.out.println("s.assVariable: " + s.assVariable);
+                    //System.out.println("assExpr.getValue: " + s.assExpr.getValue());
+                    SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
+               }
+               //SymbolTable.setValue(assVariable, assExpr.getValue());
            }
           //  } else {
             //    System.err.println("Duplicate ID: " + this.varID);
