@@ -149,6 +149,10 @@ public class Variable {
             return new Variable(intVal + x.intVal);
         } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
             return new Variable(floatVal + x.floatVal);
+        } else if (vType == ValType.FLOAT && x.vType == ValType.INT) {
+            return new Variable(floatVal + x.intVal);
+        } else if (vType == ValType.INT && x.vType == ValType.FLOAT) {
+            return new Variable(intVal + x.floatVal);
         } else {
             parser.print_error("Type mismatch at ' + '");
         }
@@ -160,7 +164,11 @@ public class Variable {
             return new Variable(intVal - x.intVal);
         } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
             return new Variable(floatVal - x.floatVal);
-        }  else {
+        }  else if (vType == ValType.FLOAT && x.vType == ValType.INT) {
+            return new Variable(floatVal - x.intVal);
+        } else if (vType == ValType.INT && x.vType == ValType.FLOAT) {
+            return new Variable(intVal - x.floatVal);
+        } else {
             //parser.print_error("Type mismatch at ' - '");
             parser.print_error("Type mismatch at ' - '");
         }
@@ -172,8 +180,11 @@ public class Variable {
             return new Variable(intVal * x.intVal);
         } else if (vType == ValType.FLOAT && x.vType == ValType.FLOAT) {
             return new Variable(floatVal * x.floatVal);
+        } else if (vType == ValType.FLOAT && x.vType == ValType.INT) {
+            return new Variable(floatVal * x.intVal);
+        } else if (vType == ValType.INT && x.vType == ValType.FLOAT) {
+            return new Variable(intVal * x.floatVal);
         } else {
-            parser.print_error(intVal.toString());
             parser.print_error("Type mismatch at ' * '");
         }
         return this;
@@ -190,6 +201,10 @@ public class Variable {
                 parser.print_error("Cannot divide by zero");
             }
             return new Variable(floatVal / x.floatVal);
+        } else if (vType == ValType.FLOAT && x.vType == ValType.INT) {
+            return new Variable(floatVal / x.intVal);
+        } else if (vType == ValType.INT && x.vType == ValType.FLOAT) {
+            return new Variable(intVal / x.floatVal);
         } else {
             parser.print_error("Type mismatch at ' / '");
         }
