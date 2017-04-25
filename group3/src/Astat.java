@@ -14,6 +14,7 @@ public class Astat {
     public static int funDeclaration = 6;
     public static int returnStatement = 7;
     public static int forloop = 8;
+    public static int funCall = 9;
     /*
      * assignment statement: variable = expr
      *
@@ -137,9 +138,38 @@ public class Astat {
         statement.blockBody = l;
         return statement;
     }
+    
+    String functionName;
+    Lstat paramList;
+    Astat functionBody;
+    public static Astat functionDefine(Lstat functionName, Lstat paramList, Astat funcBody){
+        Astat statement = new Astat();
+        statement.statementType = funDeclaration;
+        statement.functionName = functionName.getstat();
+        statement.paramList = paramList;
+        statement.functionBody = funcBody;
+        return statement;
+    }
+    public String getFunctionName(){
+        return functionName;
+    }
+    
+    Listexp argList;
+    public static Astat functionCall(String functionName, Listexp args){
+        Astat statement = new Astat();
+        statement.statementType = funCall;
+        statement.functionName = functionName;
+        statement.argList = args;
+        return statement;
+    }
+    public Listexp getArgList(){
+        return argList;
+    }
 
     public String getstat() {
-        if (statementType == assignment) {
+        if (statementType == varDeclaration) {
+            return assVariable;
+        } else if (statementType == assignment) {
             return assVariable + ":=" + assExpr.getexp();
         } else if (statementType == ifthen) {
             return "if " + ifcondition.getexp() + " " + ifbody.getstat();
@@ -151,6 +181,10 @@ public class Astat {
            return "for (" + forVarDecl.getstat() + "; " + forCondition.getexp() + "; " + forVarAssgList.getstat() + ") " + forBody.getstat();
         } else if (statementType == block) {
             return "{ " + blockBody.getstat() + " }";
+        } else if (statementType == funDeclaration) {
+            return "define " + functionName + " as function() " + functionBody.getstat();
+        } else if (statementType == funCall){
+            return functionName + "(" + argList.getExp() + ")";
         } else {
             return "unknown";
         }
@@ -160,7 +194,7 @@ public class Astat {
 //         parser.print_error(statementType);
 //         System.out.println("statementType: " + statementType);
 //         parser.print_error((new String(l.statementList.get(0).assVariable)).toString());
-
+//        System.out.println(statementType);
         if (statementType == assignment) {
 //            
 //            System.out.println("Assvariable " + assVariable + " assignment " + assExpr.getValue().getType());
@@ -250,6 +284,11 @@ public class Astat {
                 s.execute();
             }
             SymbolTable.localTable = null;
+        } else if (statementType == funDeclaration) {
+            SymbolTable.setFunction(functionName, new Aexp(this));
+        } else if (statementType == funCall) {
+            Astat functDeclared = SymbolTable.getFunction(functionName).getFuncStatement();
+            functDeclared.functionBody.execute();
         }
     }
 }

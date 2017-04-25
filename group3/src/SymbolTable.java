@@ -6,7 +6,6 @@ public class SymbolTable extends Hashtable<String,Object>{
 
     static SymbolTable globalTable;
     static SymbolTable localTable;
-    ArrayList<SymbolTable> myArrList = new ArrayList<DataType>();
 
     
     static {
@@ -18,6 +17,14 @@ public class SymbolTable extends Hashtable<String,Object>{
             localTable.put(id,value);
         else
             globalTable.put(id,value);
+    }
+    
+    static void setFunction(String id, Aexp value){
+        globalTable.put(id, value);
+    }
+    
+    static Aexp getFunction(String id){
+        return (Aexp) globalTable.get(id);
     }
 
     static Variable getValue(String id){

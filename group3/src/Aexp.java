@@ -5,7 +5,8 @@ public class Aexp {
     private enum AexpType {
         VALUE,
         ID,
-        EXP
+        EXP,
+        FUNCTION
     }
     
     private final AexpType eType;
@@ -31,6 +32,14 @@ public class Aexp {
         val = new Variable(x);
     }
     
+    Astat function;
+    Aexp(Astat x){
+        eType = AexpType.FUNCTION;
+        function = x;
+    }
+    public Astat getFuncStatement(){
+        return function;
+    }
     
 //   
 //    Aexp(Integer x) {
@@ -59,8 +68,9 @@ public class Aexp {
         String s = "";
         switch (this.eType) {
             case VALUE: s = val.toString(); break;
-//            case INTEGER: s = "" + inum; break;
-//            case FLOAT: s = "" + fnum; break;
+            //case INTEGER: s = "" + inum; break;
+            //case FLOAT: s = "" + fnum; break;
+            case FUNCTION: s = function.getFunctionName() + "(" + function.getArgList().getExp() + ")";
             case ID: s = id; break;
             case EXP:
                 switch (operator) {
@@ -117,10 +127,13 @@ public class Aexp {
         switch (this.eType) {
             case VALUE:
                 val = this.val;
-//                if (val == null || val.getType() == Variable.ValType.VOID) {
-//                    parser.print_error("Cannot get a value of type VOID");
-//                }
+//            if (val == null || val.getType() == Variable.ValType.VOID) {
+//                parser.print_error("Cannot get a value of type VOID");
+//            }
                 break;
+            case FUNCTION:
+                Astat funcDeclared = SymbolTable.getFunction(function.getFunctionName()).getFuncStatement();
+                funcDeclared.functionBody.execute();
 //            case INTEGER:
 //                // expression is a number
 //                val = new Variable(this.inum); 
