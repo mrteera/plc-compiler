@@ -292,10 +292,9 @@ public class Astat {
                 s.execute();
             }
             SymbolTable.localTable = null;
-        }else if (statementType == funDeclaration){
+        } else if (statementType == funDeclaration) {
             SymbolTable.setFunction(functionName, new Aexp(this));
-        }
-        else if(statementType == funCall){
+        } else if (statementType == funCall) {
             Astat functDeclared = SymbolTable.getFunction(functionName).getFuncStatement();
             functDeclared.functionBody.execute();
         }

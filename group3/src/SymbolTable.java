@@ -6,7 +6,6 @@ public class SymbolTable extends Hashtable<String,Object>{
 
     static SymbolTable globalTable;
     static SymbolTable localTable;
-    ArrayList<SymbolTable> myArrList = new ArrayList<DataType>();
 
     
     static {
