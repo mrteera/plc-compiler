@@ -205,13 +205,13 @@ public class Astat {
 //            
 //            System.out.println("Assvariable " + assVariable + " assignment " + assExpr.getValue().getType());
 //            System.out.println("symbol" + SymbolTable.globalTable.get(assVariable) );
-            if((assExpr.getValue().getType() == Variable.ValType.INT) && ((SymbolTable.getValue(assVariable)).getType() == Variable.ValType.INT)){
+            if((assExpr.getValue().getType() == Variable.ValType.INT) && (SymbolTable.getType(assVariable) == 1)){
                 SymbolTable.setValue(assVariable, assExpr.getValue());
             }
-            else if((assExpr.getValue().getType() == Variable.ValType.BOOL) && ((SymbolTable.getValue(assVariable)).getType() == Variable.ValType.BOOL)){
+            else if((assExpr.getValue().getType() == Variable.ValType.BOOL) && (SymbolTable.getType(assVariable) == 2)){
                 SymbolTable.setValue(assVariable, assExpr.getValue());  
             }
-            else if((assExpr.getValue().getType() == Variable.ValType.FLOAT) && ((SymbolTable.getValue(assVariable)).getType() == Variable.ValType.FLOAT)){
+            else if((assExpr.getValue().getType() == Variable.ValType.FLOAT) && (SymbolTable.getType(assVariable) == 3)){
                 SymbolTable.setValue(assVariable, assExpr.getValue());
             }
             else {
@@ -228,17 +228,17 @@ public class Astat {
                // System.out.println("assignemntStatementType: " + s.assignmentStatementType);
                SymbolTable.setType(varType, s.assVariable);
                if (s.assignmentStatementType == assignment) {
-                    //System.out.println("hello2");
-                    //System.out.println("s.assVariable: " + s.assVariable);
-                    //System.out.println("assExpr.getValue: " + s.assExpr.getValue());
-                    //SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
-                    if((s.assExpr.getValue().getType() == Variable.ValType.INT) && ((SymbolTable.getValue(s.assVariable)).getType() == Variable.ValType.INT)){
+//                    System.out.println("hello2");
+//                    System.out.println("s.assVariable: " + s.assVariable);
+//                    System.out.println("assExpr.getValue: " + s.assExpr.getValue());
+//                    SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
+                    if((s.assExpr.getValue().getType() == Variable.ValType.INT) && (SymbolTable.getType(s.assVariable) == 1)){
                         SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
                     }
-                    else if((s.assExpr.getValue().getType() == Variable.ValType.BOOL) && ((SymbolTable.getValue(s.assVariable)).getType() == Variable.ValType.BOOL)){
+                    else if((s.assExpr.getValue().getType() == Variable.ValType.BOOL) && (SymbolTable.getType(s.assVariable) == 2)){
                         SymbolTable.setValue(s.assVariable, s.assExpr.getValue());  
                     }
-                    else if((s.assExpr.getValue().getType() == Variable.ValType.FLOAT) && (((SymbolTable.getValue(s.assVariable)).getType() == Variable.ValType.FLOAT))){
+                    else if((s.assExpr.getValue().getType() == Variable.ValType.FLOAT) && (SymbolTable.getType(s.assVariable) == 3)){
                         SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
                     }
                     else {
@@ -257,7 +257,7 @@ public class Astat {
             }
 
         } else if (statementType == whileloop) {
-
+            SymbolTable.newLocalTable();
             for (;;) {
 
                 if (whileCondition.getValue().getBoolVal() != false) {
@@ -267,8 +267,10 @@ public class Astat {
                 }
 
             }
+            SymbolTable.deleteLocalTable();
 
         } else if (statementType == forloop) {
+            SymbolTable.newLocalTable();
             forVarDecl.execute();
             for (;;) {
                 if (forCondition.getValue().getBoolVal() != false) {
@@ -279,6 +281,7 @@ public class Astat {
                 }
 
             }
+            SymbolTable.deleteLocalTable();
 
         } else if (statementType == print) {
 
@@ -287,11 +290,9 @@ public class Astat {
         } else if (statementType == printline) {
             System.out.println();
         } else if (statementType == block) {
-            SymbolTable.localTable = new SymbolTable();
             for (Astat s : blockBody.statementList) {
                 s.execute();
             }
-            SymbolTable.localTable = null;
         } else if (statementType == funDeclaration) {
             SymbolTable.setFunction(functionName, new Aexp(this));
         } else if (statementType == funCall) {

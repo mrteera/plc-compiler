@@ -1,75 +1,102 @@
 package src;
 
 import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SymbolTable extends Hashtable<String,Object>{
 
-    static SymbolTable globalTable;
-    static SymbolTable localTable;
+    static List<SymbolTable> variableTable;
 
-    
     static {
-        globalTable = new SymbolTable();
+        SymbolTable globalTable = new SymbolTable();
+        variableTable = new ArrayList<SymbolTable>();
+        variableTable.add(globalTable);
     }
     
-    static void setValue(String id, Variable value){
-        if(localTable != null)
-            localTable.put(id,value);
-        else
-            globalTable.put(id,value);
+    static void newLocalTable() {
+        SymbolTable newLocal = new SymbolTable();
+        variableTable.add(newLocal);
+    }
+    
+    static void deleteLocalTable() {
+        variableTable.remove(variableTable.size()-1);
+    }
+    
+    static void setObject(String id, Object value) {
+        if (isExistID(id)) {
+            for (int i=variableTable.size()-1; i >= 0; i--){
+                SymbolTable symbolTable = variableTable.get(i);
+                if (symbolTable.containsKey(id)){
+                    symbolTable.put(id, value);
+                    variableTable.set(i, symbolTable);
+                    break;
+                }
+            }
+        } else {
+            SymbolTable symbolTable = variableTable.get(variableTable.size()-1);
+            symbolTable.put(id, value);
+            variableTable.set(variableTable.size()-1, symbolTable);
+        }
+        
+    }
+    
+    static void setValue(String id, Variable value) {
+        setObject(id, value);
+    }
+    
+    static void setType(int value, String id) {
+        setObject(id, value);
     }
     
     static void setFunction(String id, Aexp value){
-        globalTable.put(id, value);
+        setObject(id, value);
     }
     
-    static Aexp getFunction(String id){
-        return (Aexp) globalTable.get(id);
-    }
-
-    static Variable getValue(String id){
-        if(localTable != null){
-            if (localTable.get(id).getClass() == Variable.class )
-                return (Variable) localTable.get(id);
-            else {
-                if ((int)localTable.get(id) == 1)
-                    return new Variable(1);
-                else if((int)localTable.get(id) == 2)
-                    return new Variable(true);
-                else if((int)localTable.get(id) == 3)
-                    return new Variable(1.0);
-            }
-        } else {
-            if (globalTable.get(id).getClass() == Variable.class )
-                return (Variable) globalTable.get(id);
-            else {
-                if ((int)globalTable.get(id) == 1)
-                    return new Variable(1);
-                else if((int)globalTable.get(id) == 2)
-                    return new Variable(true);
-                else if((int)globalTable.get(id) == 3)
-                    return new Variable(1.0);
+    static Object getObject(String id){
+        for (int i=variableTable.size()-1; i >= 0; i--){
+            SymbolTable symbolTable = variableTable.get(i);
+            if (symbolTable.containsKey(id)){
+                return symbolTable.get(id);
             }
         }
         return null;
     }
+
+    static Variable getValue(String id){
+        if (getObject(id).getClass() != Variable.class)
+            return null;
+        return (Variable) getObject(id);
+    }
     
     static Integer getType(String id) {
-        if(localTable != null)
-            return (Integer) localTable.get(id);
-        return (Integer) globalTable.get(id);
+        if (getObject(id).getClass() == Variable.class){
+            Variable v = getValue(id);
+            if (v.getType() == Variable.ValType.INT){
+                return 1;
+            }
+            else if(v.getType() == Variable.ValType.BOOL){
+                return 2;
+            }
+            else if(v.getType() == Variable.ValType.FLOAT){
+                return 3;
+            }
+        }
+        return (Integer) getObject(id);
+    }
+    
+    static Aexp getFunction(String id){
+        return (Aexp) getObject(id);
     }
     
     static boolean isExistID(String id) {
-        if(localTable != null)
-            return localTable.containsKey(id);
-        return globalTable.containsKey(id);
+        boolean result = false;
+        for (int i=variableTable.size()-1; i >= 0; i--){
+            SymbolTable symbolTable = variableTable.get(i);
+            result = symbolTable.containsKey(id);
+        }
+        return result;
     }
     
-    static void setType(int type, String id) {
-        if(localTable != null)
-            localTable.put(id ,type);
-        else
-            globalTable.put(id ,type);
-    }
+   
 }
