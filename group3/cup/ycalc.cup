@@ -25,9 +25,10 @@ terminal Double    FLOAT;
 terminal Boolean   BOOLVALUE; 
 
 non terminal Object             program;
-non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec, assign, for, function_define, function_call;
-non terminal Lstat              statement_list, id_list;
+non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec, assign, for, function_define, function_call, param;
+non terminal Lstat              statement_list, id_list, param_list;
 non terminal Aexp               expr, compare, pm, term, factor;
+non terminal Listexp            argument_list;
 
 program         ::= statement_list:s
                     {: s.execute(); :};
@@ -92,10 +93,30 @@ print           ::= PRINT expr:e
 
 function_define ::= DEFINE id_list:i AS FUNCTION LPAREN RPAREN statement:s
                     {: RESULT = Astat.functionDefine(i, null, s); :}
+                | DEFINE id_list:i AS FUNCTION LPAREN param_list:p RPAREN statement:s
+                    {: RESULT = Astat.functionDefine(i, p, s); :}
+                ;
+
+param_list      ::= param_list:pl COMMA param:p
+                    {: RESULT = new Lstat(pl,p); :}
+                | param:p
+                    {: RESULT = new Lstat(p); :}
+                ;
+
+param           ::= TYPE:t ID:id
+                    {: RESULT = Astat.varDec((int)t, new Lstat(Astat.oneVarDec(id))); :}
                 ;
 
 function_call   ::= ID:i LPAREN RPAREN
                     {: RESULT = Astat.functionCall(i, null); :}
+                | ID:i LPAREN argument_list:al RPAREN
+                    {: RESULT = Astat.functionCall(i, al); :}
+                ;
+
+argument_list   ::= argument_list:al COMMA factor:f
+                    {: RESULT = new Listexp(al, f); :}
+                | factor:f
+                    {: RESULT = new Listexp(f); :}
                 ;
 
 ifthen          ::= IF expr:e THEN statement:s

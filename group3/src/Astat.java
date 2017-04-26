@@ -1,6 +1,7 @@
 package src;
 
 import java.time.Clock;
+import java.util.LinkedList;
 
 public class Astat {
     int statementType;
@@ -288,16 +289,55 @@ public class Astat {
             System.out.print(printE.getValue());
 
         } else if (statementType == printline) {
+            
             System.out.println();
+            
         } else if (statementType == block) {
+            
             for (Astat s : blockBody.statementList) {
                 s.execute();
             }
+            
         } else if (statementType == funDeclaration) {
+            
             SymbolTable.setFunction(functionName, new Aexp(this));
+            
         } else if (statementType == funCall) {
+            
             Astat functDeclared = SymbolTable.getFunction(functionName).getFuncStatement();
+            SymbolTable.newLocalTable();
+            if (argList != null && functDeclared.paramList != null) {
+                LinkedList<Aexp> list = argList.exprList;
+                int index = 0;
+                while(!list.isEmpty()){  
+                    Aexp assExpr = list.poll(); 
+                    String assVariable = functDeclared.paramList.statementList.get(index).varDeclList.statementList.get(0).assVariable;
+//                    System.out.println("iceza");
+//                    System.out.println("value = "+assExpr.getValue());
+//                    System.out.println("variable = "+assVariable);
+                    int varType = functDeclared.paramList.statementList.get(index).varType;
+                   
+                    if(assExpr.getEType() == Aexp.AexpType.VALUE)
+                        SymbolTable.setType(varType, assVariable);
+                    
+                    if((assExpr.getValue().getType() == Variable.ValType.INT) && (SymbolTable.getType(assVariable) == 1)){
+                        SymbolTable.setValue(assVariable, assExpr.getValue());
+                    }
+                    else if((assExpr.getValue().getType() == Variable.ValType.BOOL) && (SymbolTable.getType(assVariable) == 2)){
+                        SymbolTable.setValue(assVariable, assExpr.getValue());  
+                    }
+                    else if((assExpr.getValue().getType() == Variable.ValType.FLOAT) && (SymbolTable.getType(assVariable) == 3)){
+                        SymbolTable.setValue(assVariable, assExpr.getValue());
+                    }
+                    else {
+                        parser.print_error("Variable Type mismatch");
+                    }
+                    index++; 
+                }  
+            }
             functDeclared.functionBody.execute();
+            SymbolTable.deleteLocalTable();
+            
         }
     }
 }

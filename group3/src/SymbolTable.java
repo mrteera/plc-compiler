@@ -3,6 +3,7 @@ package src;
 import java.util.Hashtable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class SymbolTable extends Hashtable<String,Object>{
 
@@ -24,7 +25,11 @@ public class SymbolTable extends Hashtable<String,Object>{
     }
     
     static void setObject(String id, Object value) {
-        if (isExistID(id)) {
+        SymbolTable lastTable = variableTable.get(variableTable.size()-1);
+        if (!lastTable.containsKey(id)) {
+            lastTable.put(id, value);
+            variableTable.set(variableTable.size()-1, lastTable);
+        } else {
             for (int i=variableTable.size()-1; i >= 0; i--){
                 SymbolTable symbolTable = variableTable.get(i);
                 if (symbolTable.containsKey(id)){
@@ -33,12 +38,7 @@ public class SymbolTable extends Hashtable<String,Object>{
                     break;
                 }
             }
-        } else {
-            SymbolTable symbolTable = variableTable.get(variableTable.size()-1);
-            symbolTable.put(id, value);
-            variableTable.set(variableTable.size()-1, symbolTable);
-        }
-        
+        }  
     }
     
     static void setValue(String id, Variable value) {
@@ -56,6 +56,7 @@ public class SymbolTable extends Hashtable<String,Object>{
     static Object getObject(String id){
         for (int i=variableTable.size()-1; i >= 0; i--){
             SymbolTable symbolTable = variableTable.get(i);
+           
             if (symbolTable.containsKey(id)){
                 return symbolTable.get(id);
             }
@@ -98,5 +99,12 @@ public class SymbolTable extends Hashtable<String,Object>{
         return result;
     }
     
+    static void printAllSymbol(){
+        for (SymbolTable table : variableTable) {
+            for (String key : table.keySet()) {
+                System.out.println(key + ":" + table.get(key));
+            }   
+        }  
+    }
    
 }

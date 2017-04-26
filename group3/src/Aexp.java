@@ -2,7 +2,7 @@ package src;
 
 public class Aexp {
 
-    private enum AexpType {
+    public enum AexpType {
         VALUE,
         ID,
         EXP,
@@ -61,6 +61,10 @@ public class Aexp {
         eType = AexpType.EXP;
         operands = x;
         operator = op;
+    }
+    
+    public AexpType getEType() {
+        return this.eType;
     }
 
     public String getexp() {
