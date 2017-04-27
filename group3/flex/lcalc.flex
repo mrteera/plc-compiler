@@ -133,6 +133,7 @@ boolvalue = true|false
     "end"              { return symbol(sym.END); }
     "as"               { return symbol(sym.AS); }
     "function"         { return symbol(sym.FUNCTION); }
+    "else"             { return symbol(sym.ELSE); }
 
     {int}      { return symbol(sym.NUMBER, new Integer(yytext())); }
     {float}    { return symbol(sym.FLOAT, new Double(yytext())); }

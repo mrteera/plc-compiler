@@ -17,7 +17,7 @@ parser code {:
 
 
 terminal           SEMI, COMMA, PLUS, MINUS, TIMES, DIVIDE, DOUBLEPLUS, DOUBLEMINUS, LPAREN, RPAREN, EQ, DEFINE, AS;
-terminal           IF, THEN, PRINT, PRINTLINE, WHILE, FOR, DO, BEGIN,  END, TYPE, ASG, LCB, RCB;
+terminal           IF, ELSE, THEN, PRINT, PRINTLINE, WHILE, FOR, DO, BEGIN,  END, TYPE, ASG, LCB, RCB;
 terminal           LT, LE, GT, GE, NE, AND, OR, NOT, MT, FUNCTION;
 terminal Integer   NUMBER;
 terminal String    ID;
@@ -58,6 +58,8 @@ statement       ::= assignment:s
                 | LCB statement_list:s RCB
                     {: RESULT = Astat.block(s); :}
                 | DO statement_list:s RCB
+                    {: RESULT = Astat.block(s); :}
+                | ELSE statement_list:s
                     {: RESULT = Astat.block(s); :}
                 | function_define:s
                     {: RESULT = s; :}
@@ -123,6 +125,10 @@ argument_list   ::= argument_list:al COMMA factor:f
 
 ifthen          ::= IF expr:e statement:s
                     {: RESULT = Astat.ifthen(e,s); :}
+                ;
+
+ifelse          ::= IF expr:e statement:s1 statement:s2
+                    {: RESULT = Astat.ifthen(e,s1,s2); :}
                 ;
 
 

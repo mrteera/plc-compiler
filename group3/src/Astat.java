@@ -17,6 +17,7 @@ public class Astat {
     public static int forloop = 8;
     public static int funCall = 9;
     public static int printline = 10;
+    public static int ifelse = 11;
 
     /*
      * assignment statement: variable = expr
@@ -102,6 +103,16 @@ public class Astat {
         return statement;
     }
 
+    Astat elsebody;
+    public static Astat ifelse(Aexp condition, Astat Ifbody, Astat Elsebody) {
+        Astat statement = new Astat();
+        statement.statementType = ifthen;
+        statement.ifcondition = condition;
+        statement.ifbody = Ifbody;
+        statement.elsebody = Elsebody;
+
+        return statement;
+    }
     /*
      * print statement: print e
      */
@@ -166,6 +177,8 @@ public class Astat {
             return assVariable + ":=" + assExpr.getexp();
         } else if (statementType == ifthen) {
             return "if " + ifcondition.getexp() + " " + ifbody.getstat();
+        } else if (statementType == ifelse){
+            return "if " + ifcondition.getexp() + " " + ifbody.getstat() + elsebody.getstat();
         } else if (statementType == print) {
             return "print " + printE.getexp();
         } else if (statementType == whileloop) {
@@ -241,6 +254,14 @@ public class Astat {
             SymbolTable.newLocalTable();
             if (ifcondition.getValue().getBoolVal() != false) {
                 ifbody.execute();
+            }
+            SymbolTable.deleteLocalTable();
+        } else if (statementType == ifelse) {
+            SymbolTable.newLocalTable();
+            if (ifcondition.getValue().getBoolVal() != false) {
+                ifbody.execute();
+            } else {
+                elsebody.execute();
             }
             SymbolTable.deleteLocalTable();
         } else if (statementType == whileloop) {
