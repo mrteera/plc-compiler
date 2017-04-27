@@ -41,14 +41,12 @@ public class Astat {
      */
     Aexp whileCondition;
     Astat whileBody;
-
     public static Astat whileloop(Aexp condition, Astat WhileBody) {
         Astat statement = new Astat();
         statement.statementType = whileloop;
         statement.whileCondition = condition;
         statement.whileBody = WhileBody;
         return statement;
-
     }
     
     Astat forVarDecl;
@@ -65,17 +63,6 @@ public class Astat {
         return statement;
     }
     
-    
-//    Integer varType;
-//    String varID;
-//    //Aexp varExpr;
-//    public static Astat varDec(int type, String id) {
-//        Astat statement = new Astat();
-//        statement.statementType = varDeclaration;
-//        statement.varType = type;
-//        statement.varID = id;
-//        return statement;
-//    }
     
     Integer varType;
     Lstat varDeclList;
@@ -106,11 +93,10 @@ public class Astat {
      */
     Aexp ifcondition;
     Astat ifbody;
-
-    public static Astat ifthen(Aexp Condition, Astat Ifbody) {
+    public static Astat ifthen(Aexp condition, Astat Ifbody) {
         Astat statement = new Astat();
         statement.statementType = ifthen;
-        statement.ifcondition = Condition;
+        statement.ifcondition = condition;
         statement.ifbody = Ifbody;
 
         return statement;
@@ -252,11 +238,11 @@ public class Astat {
             //    System.err.println("Duplicate ID: " + this.varID);
            // }
         } else if (statementType == ifthen) {
-
-            if (ifcondition.getValue() != null) {
+            SymbolTable.newLocalTable();
+            if (ifcondition.getValue().getBoolVal() != false) {
                 ifbody.execute();
             }
-
+            SymbolTable.deleteLocalTable();
         } else if (statementType == whileloop) {
             SymbolTable.newLocalTable();
             for (;;) {

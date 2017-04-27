@@ -57,6 +57,8 @@ statement       ::= assignment:s
                     {: RESULT = s; :}
                 | LCB statement_list:s RCB
                     {: RESULT = Astat.block(s); :}
+                | DO statement_list:s RCB
+                    {: RESULT = Astat.block(s); :}
                 | function_define:s
                     {: RESULT = s; :}
                 | function_call:s 
@@ -119,7 +121,7 @@ argument_list   ::= argument_list:al COMMA factor:f
                     {: RESULT = new Listexp(f); :}
                 ;
 
-ifthen          ::= IF expr:e THEN statement:s
+ifthen          ::= IF expr:e statement:s
                     {: RESULT = Astat.ifthen(e,s); :}
                 ;
 
