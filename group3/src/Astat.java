@@ -18,6 +18,7 @@ public class Astat {
     public static int funCall = 9;
     public static int printline = 10;
     public static int ifelse = 11;
+    public static int funMain = 12;
 
     /*
      * assignment statement: variable = expr
@@ -158,6 +159,14 @@ public class Astat {
         return functionName;
     }
     
+    public static Astat functionMain(Astat funcBody){
+        Astat statement = new Astat();
+        statement.statementType = funMain;
+        statement.functionName = "main";
+        statement.functionBody = funcBody;
+        return statement;
+    }
+    
     Listexp argList;
     public static Astat functionCall(String functionName, Listexp args){
         Astat statement = new Astat();
@@ -191,6 +200,8 @@ public class Astat {
             return "define " + functionName + " as function() " + functionBody.getstat();
         } else if (statementType == funCall){
             return functionName + "(" + argList.getExp() + ")";
+        } else if (statementType == funMain){
+            return "define " + functionName + " as function() " + functionBody.getstat();
         } else {
             return "unknown";
         }
@@ -309,6 +320,14 @@ public class Astat {
             
             SymbolTable.setFunction(functionName, new Aexp(this));
             
+        } else if (statementType == funMain) {
+            
+            SymbolTable.setFunction(functionName, new Aexp(this));
+            Astat functDeclared = SymbolTable.getFunction(functionName).getFuncStatement();
+            SymbolTable.newLocalTable();
+            functDeclared.functionBody.execute();
+            SymbolTable.deleteLocalTable();
+            
         } else if (statementType == funCall) {
             
             Astat functDeclared = SymbolTable.getFunction(functionName).getFuncStatement();
@@ -319,9 +338,6 @@ public class Astat {
                 while(!list.isEmpty()){  
                     Aexp assExpr = list.poll(); 
                     String assVariable = functDeclared.paramList.statementList.get(index).varDeclList.statementList.get(0).assVariable;
-//                    System.out.println("iceza");
-//                    System.out.println("value = "+assExpr.getValue());
-//                    System.out.println("variable = "+assVariable);
                     int varType = functDeclared.paramList.statementList.get(index).varType;
                    
                     if(assExpr.getEType() == Aexp.AexpType.VALUE)

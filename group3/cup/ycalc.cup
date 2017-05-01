@@ -18,7 +18,7 @@ parser code {:
 
 terminal           SEMI, COMMA, PLUS, MINUS, TIMES, DIVIDE, DOUBLEPLUS, DOUBLEMINUS, LPAREN, RPAREN, EQ, DEFINE, AS;
 terminal           IF, ELSE, THEN, PRINT, PRINTLINE, WHILE, FOR, DO, BEGIN,  END, TYPE, ASG, LCB, RCB;
-terminal           LT, LE, GT, GE, NE, AND, OR, NOT, MT, FUNCTION;
+terminal           LT, LE, GT, GE, NE, AND, OR, NOT, MT, FUNCTION, MAIN;
 terminal Integer   NUMBER;
 terminal String    ID;
 terminal Double    FLOAT;
@@ -108,6 +108,8 @@ function_define ::= DEFINE id_list:i AS FUNCTION LPAREN RPAREN statement_part:s
                     {: RESULT = Astat.functionDefine(i, null, s); :}
                 | DEFINE id_list:i AS FUNCTION LPAREN param_list:p RPAREN statement_part:s
                     {: RESULT = Astat.functionDefine(i, p, s); :}
+                | DEFINE MAIN AS FUNCTION LPAREN RPAREN statement_part:s
+                    {: RESULT = Astat.functionMain(s); :}
                 ;
 
 param_list      ::= param_list:pl COMMA param:p
