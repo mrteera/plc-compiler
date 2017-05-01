@@ -106,7 +106,7 @@ public class Astat {
     Astat elsebody;
     public static Astat ifelse(Aexp condition, Astat Ifbody, Astat Elsebody) {
         Astat statement = new Astat();
-        statement.statementType = ifthen;
+        statement.statementType = ifelse;
         statement.ifcondition = condition;
         statement.ifbody = Ifbody;
         statement.elsebody = Elsebody;

@@ -25,7 +25,7 @@ terminal Double    FLOAT;
 terminal Boolean   BOOLVALUE; 
 
 non terminal Object             program;
-non terminal Astat              statement, statement_nonsemi, assignment, ifelse, print, while, statement_part, statement_part_nonsemi, vardec, assign, for, function_define, function_call, param;
+non terminal Astat              statement, statement_nonsemi, assignment, ifelse, print, while, statement_part, statement_if, statement_else, statement_part_nonsemi, vardec, assign, for, function_define, function_call, param;
 non terminal Lstat              statement_list, id_list, param_list;
 non terminal Aexp               expr, compare, pm, term, factor;
 non terminal Listexp            argument_list;
@@ -46,6 +46,14 @@ statement_part  ::= statement:s
                     {: RESULT = s; :} 
                 ;
 
+statement_if    ::= DO statement_list:s RCB
+                    {: RESULT = Astat.block(s); :}     
+                ;
+
+statement_else  ::= ELSE statement_nonsemi:s
+                    {: RESULT = s; :}
+                ;
+
 statement_nonsemi ::= ifelse:s
                     {: RESULT = s; :}
                 | while:s
@@ -53,9 +61,7 @@ statement_nonsemi ::= ifelse:s
                 | for:s
                     {: RESULT = s; :}
                 | LCB statement_list:s RCB
-                    {: RESULT = Astat.block(s); :}
-                | DO statement_list:s RCB
-                    {: RESULT = Astat.block(s); :}
+                    {: RESULT = Astat.block(s); :}    
                 | function_define:s
                     {: RESULT = s; :}
                 ;
@@ -126,8 +132,10 @@ argument_list   ::= argument_list:al COMMA factor:f
                     {: RESULT = new Listexp(f); :}
                 ;
 
-ifelse          ::= IF LPAREN expr:e RPAREN statement_part:s1
+ifelse          ::= IF LPAREN expr:e RPAREN statement_if:s1
                     {: RESULT = Astat.ifthen(e,s1); :}
+                | IF LPAREN expr:e RPAREN statement_if:s1 statement_else:s2
+                    {: RESULT = Astat.ifelse(e,s1,s2); :}
                 ;
 
 
