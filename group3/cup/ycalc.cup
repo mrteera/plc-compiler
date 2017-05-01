@@ -25,7 +25,7 @@ terminal Double    FLOAT;
 terminal Boolean   BOOLVALUE; 
 
 non terminal Object             program;
-non terminal Astat              statement, statement_nonsemi, assignment, ifthen, print, while, statement_part, statement_part_nonsemi, vardec, assign, for, function_define, function_call, param;
+non terminal Astat              statement, statement_nonsemi, assignment, ifelse, print, while, statement_part, statement_part_nonsemi, vardec, assign, for, function_define, function_call, param;
 non terminal Lstat              statement_list, id_list, param_list;
 non terminal Aexp               expr, compare, pm, term, factor;
 non terminal Listexp            argument_list;
@@ -46,7 +46,7 @@ statement_part  ::= statement:s
                     {: RESULT = s; :} 
                 ;
 
-statement_nonsemi ::= ifthen:s
+statement_nonsemi ::= ifelse:s
                     {: RESULT = s; :}
                 | while:s
                     {: RESULT = s; :}
@@ -58,8 +58,6 @@ statement_nonsemi ::= ifthen:s
                     {: RESULT = Astat.block(s); :}
                 | function_define:s
                     {: RESULT = s; :}
-                | function_call:s 
-                    {: RESULT = s; :}
                 ;
 
 statement       ::= assignment:s
@@ -67,6 +65,8 @@ statement       ::= assignment:s
                 | vardec:s
                     {: RESULT = s; :} 
                 | print:s
+                    {: RESULT = s; :}
+                | function_call:s 
                     {: RESULT = s; :}
                 ;
 
@@ -126,12 +126,8 @@ argument_list   ::= argument_list:al COMMA factor:f
                     {: RESULT = new Listexp(f); :}
                 ;
 
-ifthen          ::= IF expr:e statement_part:s
-                    {: RESULT = Astat.ifthen(e,s); :}
-                ;
-
-ifelse          ::= IF expr:e statement_part:s1 statement_part:s2
-                    {: RESULT = Astat.ifthen(e,s1,s2); :}
+ifelse          ::= IF LPAREN expr:e RPAREN statement_part:s1
+                    {: RESULT = Astat.ifthen(e,s1); :}
                 ;
 
 
@@ -160,12 +156,12 @@ compare         ::= compare:c1 EQ pm:p1
                     {: RESULT = new Aexp(new Args(c1, p1), sym.AND); :}
                 | compare:c1 OR pm:p1 
                     {: RESULT = new Aexp(new Args(c1, p1), sym.OR); :}
-                | NOT LPAREN compare:c1 RPAREN
-                    {: RESULT = new Aexp(new Args(c1, null), sym.NOT); :}
                 | pm:p
                     {: RESULT = p; :};
 
-pm              ::= pm:p PLUS term:t
+pm              ::= NOT LPAREN compare:c1 RPAREN
+                    {: RESULT = new Aexp(new Args(c1, null), sym.NOT); :}
+                | pm:p PLUS term:t
                     {: RESULT = new Aexp(new Args(p,t), sym.PLUS); :}
                 | pm:p MINUS term:t
                     {: RESULT = new Aexp(new Args(p,t), sym.MINUS); :}
