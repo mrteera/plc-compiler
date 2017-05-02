@@ -213,7 +213,7 @@ public class Astat {
 //         parser.print_error((new String(l.statementList.get(0).assVariable)).toString());
 //        System.out.println(statementType);
         if (statementType == assignment) {
-//            
+            
 //            System.out.println("Assvariable " + assVariable + " assignment " + assExpr.getValue().getType());
 //            System.out.println("symbol" + SymbolTable.globalTable.get(assVariable) );
             if((assExpr.getValue().getType() == Variable.ValType.INT) && (SymbolTable.getType(assVariable) == 1)){
@@ -232,7 +232,7 @@ public class Astat {
         } else if (statementType == varDeclaration) {
            // if ( !SymbolTable.isExistID(varID)) {
            // parser.print_error((new String(varDeclList.statementList.get(0).varID)).toString());
-
+           
            for (Astat s : varDeclList.statementList) {
                // parser.print_error((new Integer(varType)).toString());
                // parser.print_error(assExpr.toString());
@@ -258,6 +258,8 @@ public class Astat {
                }
                //SymbolTable.setValue(assVariable, assExpr.getValue());
            }
+//           SymbolTable.printAllSymbol();
+//            System.out.println();
           //  } else {
             //    System.err.println("Duplicate ID: " + this.varID);
            // }
@@ -303,6 +305,7 @@ public class Astat {
             SymbolTable.deleteLocalTable();
 
         } else if (statementType == print) {
+            
             System.out.print(printE.getValue());
 
         } else if (statementType == printline) {
