@@ -33,35 +33,35 @@ public class SymbolTable extends Hashtable<String,Object>{
     }
     
     static void setObject(String id, Object value) {
-        SymbolTable lastTable = variableTable.get(variableTable.size()-1);
-        if (!lastTable.containsKey(id)) {
-            lastTable.put(id, value);
-            variableTable.set(variableTable.size()-1, lastTable);
-        } else {
-            for (int i=variableTable.size()-1; i >= 0; i--){
-                SymbolTable symbolTable = variableTable.get(i);
-                if (symbolTable.containsKey(id)){
-                    symbolTable.put(id, value);
-                    variableTable.set(i, symbolTable);
-                    break;
-                }
-            }
-        }  
-//        boolean status = false;
-//        for (int i=variableTable.size()-1; i >= 0; i--){
-//            SymbolTable symbolTable = variableTable.get(i);
-//            if (symbolTable.containsKey(id)){
-//                symbolTable.put(id, value);
-//                variableTable.set(i, symbolTable);
-//                status = true;
-//                break;
-//            }
-//        }
-//        if(!status){
-//            SymbolTable lastTable = variableTable.get(variableTable.size()-1);
+//        SymbolTable lastTable = variableTable.get(variableTable.size()-1);
+//        if (!lastTable.containsKey(id)) {
 //            lastTable.put(id, value);
 //            variableTable.set(variableTable.size()-1, lastTable);
-//        }
+//        } else {
+//            for (int i=variableTable.size()-1; i >= 0; i--){
+//                SymbolTable symbolTable = variableTable.get(i);
+//                if (symbolTable.containsKey(id)){
+//                    symbolTable.put(id, value);
+//                    variableTable.set(i, symbolTable);
+//                    break;
+//                }
+//            }
+//        }  
+        boolean status = false;
+        for (int i=variableTable.size()-1; i >= 0; i--){
+            SymbolTable symbolTable = variableTable.get(i);
+            if (symbolTable.containsKey(id)){
+                symbolTable.put(id, value);
+                variableTable.set(i, symbolTable);
+                status = true;
+                break;
+            }
+        }
+        if(!status){
+            SymbolTable lastTable = variableTable.get(variableTable.size()-1);
+            lastTable.put(id, value);
+            variableTable.set(variableTable.size()-1, lastTable);
+        }
     }
     
     static void setValue(String id, Variable value) {

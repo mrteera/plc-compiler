@@ -237,12 +237,13 @@ public class Astat {
                // parser.print_error((new Integer(varType)).toString());
                // parser.print_error(assExpr.toString());
                // System.out.println("assignemntStatementType: " + s.assignmentStatementType);
-               SymbolTable.setType(varType, s.assVariable);
+               SymbolTable.addNewObject(varType, s.assVariable);
                if (s.assignmentStatementType == assignment) {
 //                    System.out.println("hello2");
 //                    System.out.println("s.assVariable: " + s.assVariable);
 //                    System.out.println("assExpr.getValue: " + s.assExpr.getValue());
 //                    SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
+                
                     if((s.assExpr.getValue().getType() == Variable.ValType.INT) && (SymbolTable.getType(s.assVariable) == 1)){
                         SymbolTable.setValue(s.assVariable, s.assExpr.getValue());
                     }
