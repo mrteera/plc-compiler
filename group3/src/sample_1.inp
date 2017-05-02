@@ -1,13 +1,15 @@
-define a as int;
-define b as int;
+define test_integer_operations_should_return_zero as function (bool result, int int_input) {
+  if (int_input = 0) do
+    result := true;
+  } else {
+    result := false;
+  }
+}
 
-a := 5;
-b := 1;
-
-while a do
-begin
-    b := b * a;
-    a := a - 1;
-end;
- 
-print b;
+define main as function () {
+  define result := false as bool;
+  define int_input := 100 as int;
+  test_integer_operations_should_return_zero(result, int_input);
+  print result;
+  printline;
+}

@@ -303,7 +303,6 @@ public class Astat {
             SymbolTable.deleteLocalTable();
 
         } else if (statementType == print) {
-
             System.out.print(printE.getValue());
 
         } else if (statementType == printline) {
@@ -335,13 +334,15 @@ public class Astat {
             if (argList != null && functDeclared.paramList != null) {
                 LinkedList<Aexp> list = argList.exprList;
                 int index = 0;
+                
                 while(!list.isEmpty()){  
                     Aexp assExpr = list.poll(); 
                     String assVariable = functDeclared.paramList.statementList.get(index).varDeclList.statementList.get(0).assVariable;
                     int varType = functDeclared.paramList.statementList.get(index).varType;
-                   
-                    if(assExpr.getEType() == Aexp.AexpType.VALUE)
+//                    SymbolTable.printAllSymbol();
+                    if(assExpr.getEType() == Aexp.AexpType.VALUE){
                         SymbolTable.setType(varType, assVariable);
+                    }
                     
                     if((assExpr.getValue().getType() == Variable.ValType.INT) && (SymbolTable.getType(assVariable) == 1)){
                         SymbolTable.setValue(assVariable, assExpr.getValue());
