@@ -18,14 +18,14 @@ parser code {:
 
 terminal           SEMI, COMMA, PLUS, MINUS, TIMES, DIVIDE, DOUBLEPLUS, DOUBLEMINUS, LPAREN, RPAREN, EQ, DEFINE, AS;
 terminal           IF, ELSE, THEN, PRINT, PRINTLINE, WHILE, FOR, DO, BEGIN,  END, TYPE, ASG, LCB, RCB;
-terminal           LT, LE, GT, GE, NE, AND, OR, NOT, MT, FUNCTION;
+terminal           LT, LE, GT, GE, NE, AND, OR, NOT, MT, FUNCTION, MAIN;
 terminal Integer   NUMBER;
 terminal String    ID;
 terminal Double    FLOAT;
 terminal Boolean   BOOLVALUE; 
 
 non terminal Object             program;
-non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec, assign, for, function_define, function_call, param;
+non terminal Astat              statement, statement_nonsemi, assignment, ifelse, print, while, statement_part, statement_if, statement_else, statement_part_nonsemi, vardec, assign, for, function_define, function_call, param;
 non terminal Lstat              statement_list, id_list, param_list;
 non terminal Aexp               expr, compare, pm, term, factor;
 non terminal Listexp            argument_list;
@@ -35,57 +35,66 @@ program         ::= statement_list:s
 
 statement_list  ::= statement_list:l statement_part:s
                     {: RESULT = new Lstat(l,s) ; :}
-                |   statement_part:s
+                | statement_part:s
                     {: RESULT = new Lstat(s); :}
                 ;
 
-statement_part  ::= statement:s
-                    {: RESULT = s; :}
-                SEMI;
+statement_part  ::= statement:s 
+                    {: RESULT = s; :} 
+                SEMI
+                | statement_nonsemi:s 
+                    {: RESULT = s; :} 
+                ;
 
-statement       ::= assignment:s
+statement_if    ::= DO statement_list:s RCB
+                    {: RESULT = Astat.block(s); :}     
+                ;
+
+statement_else  ::= ELSE statement_nonsemi:s
                     {: RESULT = s; :}
-                | vardec:s
-                  {: RESULT = s; :} 
-                | ifthen:s
-                    {: RESULT = s; :}
-                | print:s
+                ;
+
+statement_nonsemi ::= ifelse:s
                     {: RESULT = s; :}
                 | while:s
                     {: RESULT = s; :}
                 | for:s
                     {: RESULT = s; :}
                 | LCB statement_list:s RCB
-                    {: RESULT = Astat.block(s); :}
-                | DO statement_list:s RCB
-                    {: RESULT = Astat.block(s); :}
-                | ELSE statement_list:s
-                    {: RESULT = Astat.block(s); :}
+                    {: RESULT = Astat.block(s); :}    
                 | function_define:s
+                    {: RESULT = s; :}
+                ;
+
+statement       ::= assignment:s
+                    {: RESULT = s; :}
+                | vardec:s
+                    {: RESULT = s; :} 
+                | print:s
                     {: RESULT = s; :}
                 | function_call:s 
                     {: RESULT = s; :}
                 ;
 
 vardec          ::= DEFINE:d id_list:idl AS TYPE:t
-                {: RESULT = Astat.varDec((int)t, idl); :}
+                    {: RESULT = Astat.varDec((int)t, idl); :}
                 ;
 
 id_list         ::= ID:id COMMA id_list:idl
-                {:    RESULT = new Lstat(idl, Astat.oneVarDec(id)); :}
+                    {: RESULT = new Lstat(idl, Astat.oneVarDec(id)); :}
                 | assignment:assign COMMA id_list:idl
-                {:    RESULT = new Lstat(idl, assign); :}
+                    {: RESULT = new Lstat(idl, assign); :}
                 | assignment:assign
-                {:    RESULT = new Lstat(assign); :}
+                    {: RESULT = new Lstat(assign); :}
                 | ID:id
-                {:    RESULT = new Lstat(Astat.oneVarDec(id)); :}
+                    {: RESULT = new Lstat(Astat.oneVarDec(id)); :}
                 ;
 
-while           ::= WHILE LPAREN expr:e RPAREN statement:s
+while           ::= WHILE LPAREN expr:e RPAREN statement_part:s
                     {: RESULT = Astat.whileloop(e,s); :}
                 ;
 
-for             ::= FOR LPAREN vardec:v SEMI compare:c SEMI assignment:a RPAREN statement:s
+for             ::= FOR LPAREN vardec:v SEMI compare:c SEMI assignment:a RPAREN statement_part:s
                     {: RESULT = Astat.forloop(v,c,a,s); :}
                 ;
 
@@ -95,10 +104,12 @@ print           ::= PRINT expr:e
                     {: RESULT = Astat.printline(); :}
                 ;
 
-function_define ::= DEFINE id_list:i AS FUNCTION LPAREN RPAREN statement:s
+function_define ::= DEFINE id_list:i AS FUNCTION LPAREN RPAREN statement_part:s
                     {: RESULT = Astat.functionDefine(i, null, s); :}
-                | DEFINE id_list:i AS FUNCTION LPAREN param_list:p RPAREN statement:s
+                | DEFINE id_list:i AS FUNCTION LPAREN param_list:p RPAREN statement_part:s
                     {: RESULT = Astat.functionDefine(i, p, s); :}
+                | DEFINE MAIN AS FUNCTION LPAREN RPAREN statement_part:s
+                    {: RESULT = Astat.functionMain(s); :}
                 ;
 
 param_list      ::= param_list:pl COMMA param:p
@@ -123,12 +134,10 @@ argument_list   ::= argument_list:al COMMA factor:f
                     {: RESULT = new Listexp(f); :}
                 ;
 
-ifthen          ::= IF expr:e statement:s
-                    {: RESULT = Astat.ifthen(e,s); :}
-                ;
-
-ifelse          ::= IF expr:e statement:s1 statement:s2
-                    {: RESULT = Astat.ifthen(e,s1,s2); :}
+ifelse          ::= IF LPAREN expr:e RPAREN statement_if:s1
+                    {: RESULT = Astat.ifthen(e,s1); :}
+                | IF LPAREN expr:e RPAREN statement_if:s1 statement_else:s2
+                    {: RESULT = Astat.ifelse(e,s1,s2); :}
                 ;
 
 
@@ -157,12 +166,12 @@ compare         ::= compare:c1 EQ pm:p1
                     {: RESULT = new Aexp(new Args(c1, p1), sym.AND); :}
                 | compare:c1 OR pm:p1 
                     {: RESULT = new Aexp(new Args(c1, p1), sym.OR); :}
-                | NOT LPAREN compare:c1 RPAREN
-                    {: RESULT = new Aexp(new Args(c1, null), sym.NOT); :}
                 | pm:p
                     {: RESULT = p; :};
 
-pm              ::= pm:p PLUS term:t
+pm              ::= NOT LPAREN compare:c1 RPAREN
+                    {: RESULT = new Aexp(new Args(c1, null), sym.NOT); :}
+                | pm:p PLUS term:t
                     {: RESULT = new Aexp(new Args(p,t), sym.PLUS); :}
                 | pm:p MINUS term:t
                     {: RESULT = new Aexp(new Args(p,t), sym.MINUS); :}

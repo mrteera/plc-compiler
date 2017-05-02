@@ -68,7 +68,8 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 /* A literal integer is is a number beginning with a number between
    one and nine followed by zero or more numbers between zero and nine
    or just a zero.  */
-int = 0 | [1-9][0-9]*
+dec_int_lit = 0 | [1-9][0-9]*
+int = (-)?{dec_int_lit}
 
 /* A identifier integer is a word beginning a letter between A and
    Z, a and z, or an underscore followed by zero or more letters
@@ -134,6 +135,7 @@ boolvalue = true|false
     "as"               { return symbol(sym.AS); }
     "function"         { return symbol(sym.FUNCTION); }
     "else"             { return symbol(sym.ELSE); }
+    "main"             { return symbol(sym.MAIN); }
 
     {int}      { return symbol(sym.NUMBER, new Integer(yytext())); }
     {float}    { return symbol(sym.FLOAT, new Double(yytext())); }
