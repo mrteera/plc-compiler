@@ -50,7 +50,7 @@ statement_if    ::= DO statement_list:s RCB
                     {: RESULT = Astat.block(s); :}     
                 ;
 
-statement_else  ::= ELSE statement_nonsemi:s
+statement_else  ::= ELSE statement_part:s
                     {: RESULT = s; :}
                 ;
 
