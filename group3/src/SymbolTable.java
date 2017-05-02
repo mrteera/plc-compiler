@@ -79,11 +79,11 @@ public class SymbolTable extends Hashtable<String,Object>{
     static Object getObject(String id){
         for (int i=variableTable.size()-1; i >= 0; i--){
             SymbolTable symbolTable = variableTable.get(i);
-           
             if (symbolTable.containsKey(id)){
-                return symbolTable.get(id);
+                    return symbolTable.get(id);
             }
         }
+        parser.print_error("Variable is not declare");
         return null;
     }
 
