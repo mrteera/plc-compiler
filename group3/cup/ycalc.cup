@@ -27,7 +27,7 @@ terminal Boolean   BOOLVALUE;
 non terminal Object             program;
 non terminal Astat              statement, statement_nonsemi, assignment, ifelse, print, while, statement_part, statement_if, statement_else, statement_part_nonsemi, vardec, assign, for, function_define, function_call, param;
 non terminal Lstat              statement_list, id_list, param_list;
-non terminal Aexp               expr, compare, pm, term, factor;
+non terminal Aexp               expr, compare, not, pm, term, factor;
 non terminal Listexp            argument_list;
 
 program         ::= statement_list:s
@@ -166,12 +166,15 @@ compare         ::= compare:c1 EQ pm:p1
                     {: RESULT = new Aexp(new Args(c1, p1), sym.AND); :}
                 | compare:c1 OR pm:p1 
                     {: RESULT = new Aexp(new Args(c1, p1), sym.OR); :}
+                | not:n
+                    {: RESULT = n; :};
+
+not             ::= NOT LPAREN compare:c1 RPAREN
+                    {: RESULT = new Aexp(new Args(c1, null), sym.NOT); :}
                 | pm:p
                     {: RESULT = p; :};
 
-pm              ::= NOT LPAREN compare:c1 RPAREN
-                    {: RESULT = new Aexp(new Args(c1, null), sym.NOT); :}
-                | pm:p PLUS term:t
+pm              ::= pm:p PLUS term:t
                     {: RESULT = new Aexp(new Args(p,t), sym.PLUS); :}
                 | pm:p MINUS term:t
                     {: RESULT = new Aexp(new Args(p,t), sym.MINUS); :}
