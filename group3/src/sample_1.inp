@@ -1,15 +1,101 @@
-define test_integer_operations_should_return_zero as function (bool result, int int_input) {
-  if (int_input = 0) do
+define test_integer_operations_should_return_true as function (int input) {
+  input := (((input + 100) - 100) * -100) / 100 - 1 * 2 * 5 * 10 - -200;
+  if (input = 0) do
     result := true;
-  } else {
-    result := false;
-  }
-}
-
-define main as function () {
-  define result := false as bool;
-  define int_input := 100 as int;
-  test_integer_operations_should_return_zero(result, int_input);
+  } else result := false;
   print result;
   printline;
+}
+
+define test_float_operations_should_return_true as function (float input) {
+  input := (((input + 100.0) - 100.0) * -100.0) / 100.0 - (5/3) * 2.0 * 5.0 * 10.0 - -200.0;
+  if (input = 0.0) do
+    result := true;
+  } else result := false;
+  print result; printline; result := false;
+}
+
+define test_int_and_float_operations_should_return_true as function (int i, float f) {
+  if (i*-1 - f + -1/1 = 0.0 + -1*1) do
+    result := true;
+  } else result := false;
+  print result; printline; result := false;
+}
+
+define test_boolean_operations_should_return_true as function (bool p, bool q) {
+  q := not(q and p or q);
+  if (p = q) do
+    result := true;
+  } else result := false;
+  print result; printline; result := false;
+}
+
+define test_multiple_loops_should_return_true as function () {
+  define w1 := true, w2 := true as bool;
+
+  while (w1) {
+      define level1_while := 1 as int;
+      while (w2) {
+        define level2_while := 2 as int;
+        w2 := false;
+      }
+      for (define i := 0 as int; i <= 1; i := i+1) {
+          define level1_for := 10 as int;
+          for (define j := 0 as int; j <= 1; j := j+1) {
+            define level2_for := 20 as int;
+            result := true;
+        }
+      }
+      w1 := false;
+  }
+  print result; printline; result := false;
+}
+
+define set_pi as function () {
+  pi := 3.14;
+}
+
+define test_call_function_inside_function as function () {
+  define before_set_pi := pi as float;
+  define after_set_pi := 3.14 as float;
+  set_pi();
+  result := true;
+  if ((before_set_pi = 0.0) and (after_set_pi = pi)) do
+    result := true;
+  } else result := false;
+  print result; printline; result := false;
+}
+
+define test_comparison_operations as function () {
+  define a := 1, b:= 10 as int;
+  if ((a <= b) and (a < b) and (b > a) and (b >= a) and (a != b)) do
+    result := true;
+  } else result := false;
+  print result; printline; result := false;
+}
+
+define result := false as bool;
+define pi := 0.0 as float;
+
+define main as function () {
+  print 1; printline;
+  test_integer_operations_should_return_true(100);
+
+  print 2; printline;
+  test_float_operations_should_return_true(100.0);
+
+  print 3; printline;
+  test_int_and_float_operations_should_return_true(-100, 100.0);
+
+  print 4; printline;
+  test_boolean_operations_should_return_true(true, false);
+
+  print 5; printline;
+  test_multiple_loops_should_return_true();
+
+  print 6; printline;
+  test_call_function_inside_function();
+
+  print 7; printline;
+  test_comparison_operations();
 }
