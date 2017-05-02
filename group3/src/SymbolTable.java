@@ -24,6 +24,14 @@ public class SymbolTable extends Hashtable<String,Object>{
         variableTable.remove(variableTable.size()-1);
     }
     
+    static void addNewObject(int value, String id) {
+        SymbolTable lastTable = variableTable.get(variableTable.size()-1);
+        lastTable.put(id, value);
+        variableTable.set(variableTable.size()-1, lastTable);
+//        printAllSymbol();
+//        System.out.println();
+    }
+    
     static void setObject(String id, Object value) {
 //        SymbolTable lastTable = variableTable.get(variableTable.size()-1);
 //        if (!lastTable.containsKey(id)) {

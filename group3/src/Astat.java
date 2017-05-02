@@ -340,18 +340,38 @@ public class Astat {
                     String assVariable = functDeclared.paramList.statementList.get(index).varDeclList.statementList.get(0).assVariable;
                     int varType = functDeclared.paramList.statementList.get(index).varType;
 //                    SymbolTable.printAllSymbol();
-                    if(assExpr.getEType() == Aexp.AexpType.VALUE){
-                        SymbolTable.setType(varType, assVariable);
-                    }
+//                    System.out.println();
                     
-                    if((assExpr.getValue().getType() == Variable.ValType.INT) && (SymbolTable.getType(assVariable) == 1)){
-                        SymbolTable.setValue(assVariable, assExpr.getValue());
+//                    if(assExpr.getEType() == Aexp.AexpType.VALUE){
+//                        SymbolTable.setType(varType, assVariable);
+//                    }
+//                    else if(assExpr.getEType() == Aexp.AexpType.ID){
+//                        System.out.println();
+//                        System.out.println(assExpr.getexp()+" and "+assVariable);
+//                        System.out.println();
+//                        if(!assExpr.getexp().equals(assVariable)){
+//                            SymbolTable.setType(varType, assVariable);
+//                        }
+//                    }
+                    
+//                    System.out.println("icekdodiafdsjndsjkjscsm");
+                    if((assExpr.getValue().getType() == Variable.ValType.INT)){
+                        Variable value = assExpr.getValue();
+                        SymbolTable.addNewObject(varType, assVariable);
+                        if(SymbolTable.getType(assVariable) == 1)
+                            SymbolTable.setValue(assVariable, value);
                     }
-                    else if((assExpr.getValue().getType() == Variable.ValType.BOOL) && (SymbolTable.getType(assVariable) == 2)){
-                        SymbolTable.setValue(assVariable, assExpr.getValue());  
+                    else if((assExpr.getValue().getType() == Variable.ValType.BOOL)){
+                        Variable value = assExpr.getValue();
+                        SymbolTable.addNewObject(varType, assVariable);
+                        if(SymbolTable.getType(assVariable) == 2)
+                            SymbolTable.setValue(assVariable, value);
                     }
-                    else if((assExpr.getValue().getType() == Variable.ValType.FLOAT) && (SymbolTable.getType(assVariable) == 3)){
-                        SymbolTable.setValue(assVariable, assExpr.getValue());
+                    else if((assExpr.getValue().getType() == Variable.ValType.FLOAT)){
+                        Variable value = assExpr.getValue();
+                        SymbolTable.addNewObject(varType, assVariable);
+                        if(SymbolTable.getType(assVariable) == 3)
+                            SymbolTable.setValue(assVariable, value);
                     }
                     else {
                         parser.print_error("Variable Type mismatch");
