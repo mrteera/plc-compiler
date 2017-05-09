@@ -26,6 +26,7 @@ public class SymbolTable extends Hashtable<String,Object>{
     
     static void addNewObject(Object value, String id) {
         SymbolTable lastTable = variableTable.get(variableTable.size()-1);
+//        printAllSymbol();
         if (lastTable.containsKey(id)) {
             parser.print_error("Duplicate variable '" + id + "' has already been declared.");
         }
