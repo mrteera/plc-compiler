@@ -75,7 +75,7 @@ public class SymbolTable extends Hashtable<String,Object>{
     }
     
     static void setFunction(String id, Aexp value){
-        setObject(id, value);
+        addNewObject(value, id);
     }
     
     static Object getObject(String id){
