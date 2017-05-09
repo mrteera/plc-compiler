@@ -123,10 +123,12 @@ public class SymbolTable extends Hashtable<String,Object>{
     }
     
     static void printAllSymbol(){
-        for (SymbolTable table : variableTable) {
+        int index = 0;
+        for (SymbolTable table : variableTable) {            
             for (String key : table.keySet()) {
-                System.out.println(key + ":" + table.get(key));
-            }   
+                System.out.println("scope:"+ index + " key:"+key + " value:" + table.get(key));
+            }  
+            index++;
         }  
     }
    

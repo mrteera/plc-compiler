@@ -136,11 +136,12 @@ public class Astat {
      * block statement: begin statement_list end
      */
     Lstat blockBody;
-
+    boolean check;
     public static Astat block(Lstat l) {
         Astat statement = new Astat();
         statement.statementType = block;
         statement.blockBody = l;
+        statement.check = false;
         return statement;
     }
     
@@ -267,12 +268,14 @@ public class Astat {
         } else if (statementType == ifthen) {
             SymbolTable.newLocalTable();
             if (ifcondition.getValue().getBoolVal() != false) {
+                ifbody.check = true;
                 ifbody.execute();
             }
             SymbolTable.deleteLocalTable();
         } else if (statementType == ifelse) {
             SymbolTable.newLocalTable();
             if (ifcondition.getValue().getBoolVal() != false) {
+                ifbody.check = true;
                 ifbody.execute();
             } else {
                 elsebody.execute();
@@ -283,6 +286,7 @@ public class Astat {
             for (;;) {
 
                 if (whileCondition.getValue().getBoolVal() != false) {
+                    whileBody.check = true;
                     whileBody.execute();
                 } else {
                     break;
@@ -296,6 +300,7 @@ public class Astat {
             forVarDecl.execute();
             for (;;) {
                 if (forCondition.getValue().getBoolVal() != false) {
+                    forBody.check = true;
                     forBody.execute();
                     forVarAssgList.execute();
                 } else {
@@ -312,11 +317,18 @@ public class Astat {
         } else if (statementType == printline) {
             
             System.out.println();
+//            SymbolTable.printAllSymbol();
             
         } else if (statementType == block) {
-            
-            for (Astat s : blockBody.statementList) {
-                s.execute();
+            if(!check){
+                SymbolTable.newLocalTable();
+            }
+                for (Astat s : blockBody.statementList) {
+                    s.check = true;
+                    s.execute();
+                }
+            if(!check){
+                SymbolTable.deleteLocalTable();
             }
             
         } else if (statementType == funDeclaration) {
@@ -328,6 +340,7 @@ public class Astat {
             SymbolTable.setFunction(functionName, new Aexp(this));
             Astat functDeclared = SymbolTable.getFunction(functionName).getFuncStatement();
             SymbolTable.newLocalTable();
+            functDeclared.functionBody.check =true;
             functDeclared.functionBody.execute();
             SymbolTable.deleteLocalTable();
             
@@ -383,6 +396,7 @@ public class Astat {
                     index++; 
                 }  
             }
+            functDeclared.functionBody.check = true;
             functDeclared.functionBody.execute();
             SymbolTable.deleteLocalTable();
             

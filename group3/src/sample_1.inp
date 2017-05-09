@@ -88,7 +88,9 @@ define main as function () {
   test_int_and_float_operations_should_return_true(-100, 100.0);
 
   print 4; printline;
-  test_boolean_operations_should_return_true(true, false);
+  define b := true as bool;
+  define c := false as bool;
+  test_boolean_operations_should_return_true(b, c);
 
   print 5; printline;
   test_multiple_loops_should_return_true();
