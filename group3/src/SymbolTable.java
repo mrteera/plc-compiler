@@ -24,7 +24,7 @@ public class SymbolTable extends Hashtable<String,Object>{
         variableTable.remove(variableTable.size()-1);
     }
     
-    static void addNewObject(int value, String id) {
+    static void addNewObject(Object value, String id) {
         SymbolTable lastTable = variableTable.get(variableTable.size()-1);
         lastTable.put(id, value);
         variableTable.set(variableTable.size()-1, lastTable);
@@ -58,9 +58,7 @@ public class SymbolTable extends Hashtable<String,Object>{
             }
         }
         if(!status){
-            SymbolTable lastTable = variableTable.get(variableTable.size()-1);
-            lastTable.put(id, value);
-            variableTable.set(variableTable.size()-1, lastTable);
+            addNewObject(value,id);
         }
     }
     
